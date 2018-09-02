@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">NewsClient</string>
+    <string name="title_activity__news">Activity_News</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="category_domestic">国内新闻</string>
+    <string name="category_movie">电影</string>
+
+    <string name="category_domestic_url">feed://news.qq.com/newsgn/rss_newsgn.xml</string>
+    <string name="category_movie_url">feed://ent.qq.com/movie/rss_movie.xml</string>
+    <string name="title_activity_news_detail">NewsDetailActivity</string>
+</resources>
