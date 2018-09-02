@@ -1,6 +1,7 @@
 package com.java.wangyihan;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,11 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import com.java.wangyihan.Data.RssFeed;
 import com.java.wangyihan.Data.RssFeed_SAXParser;
 import com.java.wangyihan.Data.RssHandler;
+import com.java.wangyihan.Data.RssItem;
 import org.xml.sax.SAXException;
 import java.util.Map;
 import java.util.List;
@@ -26,7 +29,7 @@ import java.io.IOException;
 
 public class Activity_News extends AppCompatActivity{
 
-    final String textUrl = "http://edu.qq.com/gaokao/rss_gaokao.xml";
+    final String textUrl = "http://news.qq.com/newsgn/rss_newsgn.xml";
     RssFeed mRssFeed;
 
     private List<Map<String,Object> > newsList = new ArrayList<Map<String,Object> >();
@@ -98,6 +101,24 @@ public class Activity_News extends AppCompatActivity{
                     new int[] {R.id.news_title,R.id.news_date}//to 到那里去
             );
             lv.setAdapter(sa);
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    RssItem item = mRssFeed.getItem(i);
+
+                    Intent intent = new Intent(view.getContext(), NewsDetailActivity.class);
+                    intent.putExtra("title", item.getTitle());
+                    intent.putExtra("description", item.getDescription());
+                    intent.putExtra("pubDate", item.getPubdate());
+                    intent.putExtra("link", item.getLink());
+
+
+                    startActivity(intent);
+                }
+            });
+
+
         }
 
 

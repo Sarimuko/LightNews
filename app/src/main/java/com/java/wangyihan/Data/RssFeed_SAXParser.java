@@ -94,7 +94,17 @@ public class RssFeed_SAXParser implements Runnable{
             //RssHandler rssHandler=new RssHandler();
             xmlReader.setContentHandler(rssHandler);
             //使用url打开流，并将流作为 xmlReader解析的输入源并解析
-            InputSource inputSource = new InputSource(url.openStream());
+            //InputSource inputSource = new InputSource(url.openStream());
+            InputStream urlStream = url.openStream();
+            BufferedReader bin = new BufferedReader(new InputStreamReader(urlStream));
+            String head = bin.readLine();
+            InputStreamReader inputStreamReader;
+            //InputSource inputSource = new InputSource(url.openStream());
+            if (head.contains("gb2312"))
+                inputStreamReader = new InputStreamReader(url.openStream(), "GB2312");
+            else
+                inputStreamReader = new InputStreamReader(url.openStream(), "UTF-8");
+            InputSource inputSource = new InputSource(inputStreamReader);
             xmlReader.parse(inputSource);
 
             //Log.e("e", Boolean.toString(rssHandler.getRssFeed() == null));

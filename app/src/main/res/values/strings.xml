@@ -11,4 +11,5 @@
     <string name="category_domestic_url">feed://news.qq.com/newsgn/rss_newsgn.xml</string>
     <string name="category_movie_url">feed://ent.qq.com/movie/rss_movie.xml</string>
     <string name="title_activity_news_detail">NewsDetailActivity</string>
+    <string name="title_activity_original_news">OriginalNewsActivity</string>
 </resources>
