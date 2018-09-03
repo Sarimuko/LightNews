@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import com.java.wangyihan.Data.DataBaseHandler.DatabaseHandler;
 import com.java.wangyihan.Data.RssFeed;
 import com.java.wangyihan.Data.RssFeed_SAXParser;
 import com.java.wangyihan.Data.RssHandler;
@@ -31,6 +32,7 @@ public class Activity_News extends AppCompatActivity{
 
     final String textUrl = "http://news.qq.com/newsgn/rss_newsgn.xml";
     RssFeed mRssFeed;
+
 
     private List<Map<String,Object> > newsList = new ArrayList<Map<String,Object> >();
 
@@ -51,11 +53,12 @@ public class Activity_News extends AppCompatActivity{
         });
 
         //Log.v("test", "testInfo");
+        mRssFeed = null;
 
         try
         {
             mRssFeed = RssFeed_SAXParser.getInstance().getFeed(textUrl);
-            Log.e("Rss Count", Integer.toString(mRssFeed.getItemCount()));
+            //Log.e("Rss Count", Integer.toString(mRssFeed.getItemCount()));
             //Log.v("Rss title", mRssFeed.getTitle());
         }
         catch (IOException e)
@@ -75,6 +78,15 @@ public class Activity_News extends AppCompatActivity{
             Log.e("exception", "get rss error 4");
         }
 
+        Log.e("is Rss Null?", Boolean.toString(mRssFeed == null));
+
+        if (mRssFeed == null || mRssFeed.getItemCount() == 0)
+        {
+            mRssFeed = new RssFeed();
+            mRssFeed.setRssItems(DatabaseHandler.getAllRead(getApplicationContext()));
+            Log.e("info", "get date from database" + Integer.toString(mRssFeed.getItemCount()));
+        }
+
         if (mRssFeed != null)
         {
             Log.e("create View", "create main view");
@@ -87,8 +99,7 @@ public class Activity_News extends AppCompatActivity{
                 //一行记录，包含多个控件
                 item.put("title", mRssFeed.getItem(i).getTitle());
                 item.put("pubDate", mRssFeed.getItem(i).getPubdate());
-                //item.put("description", mRssFeed.getItem(i).getDescription());
-                //item.put("link",messageList3.get(i).getDatetime());
+
                 newsList.add(item);
 
             }
@@ -105,7 +116,9 @@ public class Activity_News extends AppCompatActivity{
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                     RssItem item = mRssFeed.getItem(i);
+
 
                     Intent intent = new Intent(view.getContext(), NewsDetailActivity.class);
                     intent.putExtra("title", item.getTitle());
@@ -113,6 +126,7 @@ public class Activity_News extends AppCompatActivity{
                     intent.putExtra("pubDate", item.getPubdate());
                     intent.putExtra("link", item.getLink());
 
+                    DatabaseHandler.readNews(item, getApplicationContext());
 
                     startActivity(intent);
                 }

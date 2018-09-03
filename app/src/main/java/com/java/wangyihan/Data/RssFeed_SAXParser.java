@@ -49,6 +49,8 @@ public class RssFeed_SAXParser implements Runnable{
      */
     public RssFeed getFeed(String urlStr) throws ParserConfigurationException, SAXException, IOException, InterruptedException{
 
+        //for test
+        rssHandler.rssFeed = null;
         mUrl = urlStr;
         /*BufferedReader bin = new BufferedReader(new InputStreamReader(url.openStream()));
         String line;
@@ -60,7 +62,7 @@ public class RssFeed_SAXParser implements Runnable{
         thread.start();
 
         thread.join();
-        Log.e("e", Boolean.toString(rssHandler.getRssFeed() == null));
+        //Log.e("e", Boolean.toString(rssHandler.getRssFeed() == null));
 
 
         return rssHandler.getRssFeed();

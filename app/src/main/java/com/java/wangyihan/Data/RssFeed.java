@@ -42,6 +42,11 @@ public class RssFeed implements Parcelable {
 
     }
 
+    public void setRssItems(List<RssItem> items)
+    {
+        rssItems = items; itemCount = items.size();
+    }
+
     public String getTitle() {
         return title;
     }
