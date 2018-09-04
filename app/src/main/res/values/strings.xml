@@ -12,4 +12,10 @@
     <string name="category_movie_url">feed://ent.qq.com/movie/rss_movie.xml</string>
     <string name="title_activity_news_detail">NewsDetailActivity</string>
     <string name="title_activity_original_news">OriginalNewsActivity</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

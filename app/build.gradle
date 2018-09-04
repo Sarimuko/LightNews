@@ -48,8 +48,8 @@ dependencies {
     // Dependencies for Android unit tests
     androidTestCompile "junit:junit:$rootProject.ext.junitVersion"
     androidTestCompile "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
-    androidTestCompile 'com.google.dexmaker:dexmaker:1.2+'
-    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2+'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
 
     // Espresso UI Testing
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
@@ -68,9 +68,4 @@ dependencies {
 
 dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
-}
-
-dependencies {
-    // Room
-    annotationProcessor "android.arch.persistence.room:compiler:1.0.0+"
 }
