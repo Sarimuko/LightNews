@@ -9,6 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.java.wangyihan.Data.DataBaseHandler.DatabaseHandler;
+import com.java.wangyihan.Data.DataBaseHandler.FavorateNewsDatabase;
+import com.java.wangyihan.Data.RssItem;
 import org.w3c.dom.Text;
 
 public class NewsDetailActivity extends AppCompatActivity {
@@ -67,6 +70,23 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
         });
         //linkButton.setText(link);
+
+        /**
+         * 添加到收藏
+         */
+        Button favorateButton = findViewById(R.id.favorate_button);
+        favorateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RssItem item = new RssItem();
+                item.setTitle(title);
+                item.setDescription(description);
+                item.setLink(link);
+                item.setPubdate(pubDate);
+
+                DatabaseHandler.favorateNews(item, getApplicationContext());
+            }
+        });
 
     }
 

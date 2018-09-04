@@ -35,11 +35,25 @@
                     android:text="这是新闻的详细内容hhhhh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/news_detail_description"/>
-            <Button
-                    android:text="阅读原文"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/link_button"
-                    android:layout_gravity="right" android:textSize="12sp"/>
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/detail_buttons_layout">
+
+                <Button
+                        android:text="阅读原文"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/link_button"
+                        android:layout_gravity="right" android:textSize="14sp" android:layout_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/favorate_button" android:layout_marginStart="32dp"
+                        android:layout_alignParentRight="true"/>
+                <Button
+                        android:text="收藏"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/favorate_button"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:layout_toLeftOf="@id/link_button"/>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

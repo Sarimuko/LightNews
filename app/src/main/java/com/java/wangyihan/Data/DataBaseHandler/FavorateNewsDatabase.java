@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import com.java.wangyihan.Data.FavorateNews;
 
-@Database(entities = {FavorateNews.class}, version = 1, exportSchema = true)
+@Database(entities = {FavorateNews.class}, version = 1, exportSchema = false)
 public abstract class FavorateNewsDatabase extends RoomDatabase {
 
     private static FavorateNewsDatabase INSTANCE;

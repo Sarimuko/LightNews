@@ -2,18 +2,18 @@ package com.java.wangyihan;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.*;
 import com.java.wangyihan.Data.DataBaseHandler.DatabaseHandler;
 import com.java.wangyihan.Data.RssFeed;
 import com.java.wangyihan.Data.RssFeed_SAXParser;
@@ -32,9 +32,60 @@ public class Activity_News extends AppCompatActivity{
 
     final String textUrl = "http://news.qq.com/newsgn/rss_newsgn.xml";
     RssFeed mRssFeed;
+    List<RssItem> findList = new ArrayList<RssItem>();
 
 
     private List<Map<String,Object> > newsList = new ArrayList<Map<String,Object> >();
+
+    public void updateShow()
+    {
+        showList(mRssFeed.getItems());
+    }
+
+    private void showList(final List<RssItem> itemList)
+    {
+        newsList.clear();
+
+        for (int i=0;i<itemList.size();i++)
+        {
+            Map<String,Object> item = new HashMap<String,Object>();
+            //一行记录，包含多个控件
+            item.put("title", itemList.get(i).getTitle());
+            item.put("pubDate", itemList.get(i).getPubdate());
+
+            newsList.add(item);
+
+        }
+
+        ListView lv = (ListView)findViewById(R.id.news_list);
+        SimpleAdapter sa = new SimpleAdapter(this,
+                newsList,//data 不仅仅是数据，而是一个与界面耦合的数据混合体
+                R.layout.fragment_news_display,
+                new String[] {"title","pubDate"},//from 从来来
+                new int[] {R.id.news_title,R.id.news_date}//to 到那里去
+        );
+        lv.setAdapter(sa);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                RssItem item = itemList.get(i);
+
+                view.setBackgroundColor(getColor(R.color.colorClickedItem));
+
+                Intent intent = new Intent(view.getContext(), NewsDetailActivity.class);
+                intent.putExtra("title", item.getTitle());
+                intent.putExtra("description", item.getDescription());
+                intent.putExtra("pubDate", item.getPubdate());
+                intent.putExtra("link", item.getLink());
+
+                DatabaseHandler.readNews(item, getApplicationContext());
+
+                startActivity(intent);
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -90,53 +141,49 @@ public class Activity_News extends AppCompatActivity{
         if (mRssFeed != null)
         {
             Log.e("create View", "create main view");
+            updateShow();
+        }
 
-            //NewsFragment newsFragment = NewsFragment.newInstance(mRssFeed);
-            //getFragmentManager().beginTransaction().add(R.id.news_frame, newsFragment).commit();
-            for (int i=0;i<mRssFeed.getItemCount();i++)
-            {
-                Map<String,Object> item = new HashMap<String,Object>();
-                //一行记录，包含多个控件
-                item.put("title", mRssFeed.getItem(i).getTitle());
-                item.put("pubDate", mRssFeed.getItem(i).getPubdate());
-
-                newsList.add(item);
+        SearchView searchView = findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(TextUtils.isEmpty(query))
+                {
+                    Toast.makeText(Activity_News.this, "请输入查找内容！", Toast.LENGTH_SHORT).show();
+                    updateShow();
+                }
+                else
+                {
+                    findList.clear();
+                    for(int i = 0; i < mRssFeed.getItemCount(); i++)
+                    {
+                        RssItem information = mRssFeed.getItem(i);
+                        if(information.getTitle().contains(query))
+                        {
+                            findList.add(information);
+                            break;
+                        }
+                    }
+                    if(findList.size() == 0)
+                    {
+                        Toast.makeText(Activity_News.this, "没有相关新闻", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(Activity_News.this, "查找成功", Toast.LENGTH_SHORT).show();
+                        showList(findList);
+                    }
+                }
+                return true;
 
             }
 
-            ListView lv = (ListView)findViewById(R.id.news_list);
-            SimpleAdapter sa = new SimpleAdapter(this,
-                    newsList,//data 不仅仅是数据，而是一个与界面耦合的数据混合体
-                    R.layout.fragment_news_display,
-                    new String[] {"title","pubDate"},//from 从来来
-                    new int[] {R.id.news_title,R.id.news_date}//to 到那里去
-            );
-            lv.setAdapter(sa);
-
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    RssItem item = mRssFeed.getItem(i);
-
-
-                    Intent intent = new Intent(view.getContext(), NewsDetailActivity.class);
-                    intent.putExtra("title", item.getTitle());
-                    intent.putExtra("description", item.getDescription());
-                    intent.putExtra("pubDate", item.getPubdate());
-                    intent.putExtra("link", item.getLink());
-
-                    DatabaseHandler.readNews(item, getApplicationContext());
-
-                    startActivity(intent);
-                }
-            });
-
-
-        }
-
-
-
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
 

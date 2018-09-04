@@ -30,6 +30,10 @@ public class RssFeed implements Parcelable {
         return rssItems.get(position);
     }
 
+    public List<RssItem> getItems(){
+        return rssItems;
+    }
+
     public List<HashMap<String, Object>> getAllItems() {
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
         for (int i = 0; i < rssItems.size(); i++) {

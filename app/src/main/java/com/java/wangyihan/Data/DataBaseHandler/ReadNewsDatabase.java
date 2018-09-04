@@ -7,7 +7,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import com.java.wangyihan.Data.RssItem;
 
-@Database(entities = {RssItem.class}, version =  1, exportSchema = true)
+@Database(entities = {RssItem.class}, version =  1, exportSchema = false)
 public abstract class ReadNewsDatabase extends RoomDatabase {
 
     private static ReadNewsDatabase INSTANCE;
