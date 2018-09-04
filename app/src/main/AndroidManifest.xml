@@ -16,11 +16,6 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".Activity_News"
-                android:label="@string/title_activity__news"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
                 android:name=".NewsDetailActivity"
                 android:label="@string/title_activity_news_detail"
                 android:theme="@style/AppTheme.NoActionBar">

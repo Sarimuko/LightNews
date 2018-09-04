@@ -1,5 +1,6 @@
 package com.java.wangyihan;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,8 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class NavigationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NewsFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,15 @@ public class NavigationActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        ArrayList<String> testLinks = new ArrayList<String>();
+        testLinks.add("http://news.qq.com/newsgn/rss_newsgn.xml");
+
+        ArrayList<String> nameList = new ArrayList<String>();
+        nameList.add("国内新闻");
+
+        NewsFragment newsFragment = NewsFragment.newInstance(1, testLinks, nameList);
+        getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
     }
 
     @Override
@@ -101,5 +113,10 @@ public class NavigationActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

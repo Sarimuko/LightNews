@@ -46,7 +46,7 @@ public class NewsFragment extends Fragment {
 
 
     // TODO: Rename and change types of parameters
-    private int mNum;
+    private int mNum = 0;
     private ArrayList<String> mLinks;
     private ArrayList<String> mNames;
 
@@ -84,50 +84,11 @@ public class NewsFragment extends Fragment {
             mLinks = getArguments().getStringArrayList(ARG_LINKS);
         }
 
-        SearchView searchView = root.findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if(TextUtils.isEmpty(query))
-                {
-                    Toast.makeText(rootContext, "请输入查找内容！", Toast.LENGTH_SHORT).show();
-                    updateShow();
-                }
-                else
-                {
-                    findList.clear();
-                    for(int i = 0; i < mRssFeed.getItemCount(); i++)
-                    {
-                        RssItem information = mRssFeed.getItem(i);
-                        if(information.getTitle().contains(query))
-                        {
-                            findList.add(information);
-                            break;
-                        }
-                    }
-                    if(findList.size() == 0)
-                    {
-                        Toast.makeText(rootContext, "没有相关新闻", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        Toast.makeText(rootContext, "查找成功", Toast.LENGTH_SHORT).show();
-                        showList(findList);
-                    }
-                }
-                return true;
-
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
     }
 
     public void updateShow ()
     {
+        mRssFeed = new RssFeed();
         try
         {
             for (int i=0;i<mNum;i++)
@@ -204,7 +165,50 @@ public class NewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return root = inflater.inflate(R.layout.fragment_news, container, false);
+        root = inflater.inflate(R.layout.fragment_news, container, false);
+        updateShow();
+
+        SearchView searchView = root.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(TextUtils.isEmpty(query))
+                {
+                    Toast.makeText(rootContext, "请输入查找内容！", Toast.LENGTH_SHORT).show();
+                    updateShow();
+                }
+                else
+                {
+                    findList.clear();
+                    for(int i = 0; i < mRssFeed.getItemCount(); i++)
+                    {
+                        RssItem information = mRssFeed.getItem(i);
+                        if(information.getTitle().contains(query))
+                        {
+                            findList.add(information);
+                            break;
+                        }
+                    }
+                    if(findList.size() == 0)
+                    {
+                        Toast.makeText(rootContext, "没有相关新闻", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(rootContext, "查找成功", Toast.LENGTH_SHORT).show();
+                        showList(findList);
+                    }
+                }
+                return true;
+
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+        return root;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

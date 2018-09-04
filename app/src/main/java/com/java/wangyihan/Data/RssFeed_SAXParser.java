@@ -114,7 +114,7 @@ public class RssFeed_SAXParser implements Runnable{
         }
         catch (IOException e)
         {
-            Log.e("exception", "get rss error 1");
+            Log.e("exception", e.getMessage());
         }
         catch (ParserConfigurationException e)
         {
