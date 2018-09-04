@@ -14,6 +14,9 @@ public interface ReadNewsDao {
     @Query("SELECT * FROM tb_read_news WHERE title IN (:titles)")
     List<RssItem> getAllByTitles(String[] titles);
 
+    @Query("SELECT count(*) FROM tb_read_news")
+    long getReadNewsCount();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<RssItem> entities);
 

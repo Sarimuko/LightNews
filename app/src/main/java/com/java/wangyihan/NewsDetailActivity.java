@@ -10,9 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.java.wangyihan.Data.DataBaseHandler.DatabaseHandler;
-import com.java.wangyihan.Data.DataBaseHandler.FavorateNewsDatabase;
 import com.java.wangyihan.Data.RssItem;
-import org.w3c.dom.Text;
 
 public class NewsDetailActivity extends AppCompatActivity {
     private String title;

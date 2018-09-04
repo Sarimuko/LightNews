@@ -1,5 +1,6 @@
 package com.java.wangyihan;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -56,6 +58,21 @@ public class NavigationActivity extends AppCompatActivity
 
         NewsFragment newsFragment = NewsFragment.newInstance(1, testLinks, nameList);
         getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
+
+
+        /*展示用户信息*/
+        Intent intent = getIntent();
+        if (intent != null)
+        {
+            String user = intent.getStringExtra("username");
+            String email = intent.getStringExtra("email");
+
+            TextView userText = findViewById(R.id.username_text);
+            userText.setText(user);
+
+            TextView emailText = findViewById(R.id.email_address_text);
+            emailText.setText(email);
+        }
     }
 
     @Override

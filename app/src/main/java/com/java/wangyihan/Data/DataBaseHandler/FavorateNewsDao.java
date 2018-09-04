@@ -14,6 +14,9 @@ public interface FavorateNewsDao {
     @Query("SELECT * FROM tb_favorate_news WHERE title IN (:titles)")
     List<FavorateNews> getAllByTitles(String[] titles);
 
+    @Query("SELECT count(*) from tb_favorate_news")
+    long getFavorateCount();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<FavorateNews> entities);
 

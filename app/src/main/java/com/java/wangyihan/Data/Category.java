@@ -14,25 +14,36 @@ public class Category {
     @ColumnInfo
     private String name;
 
-    @Ignore
+    @ColumnInfo
+    private String url;
+
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public long getId()
     {
         return id;
     }
 
-    @Ignore
+
     public String getName()
     {
         return name;
     }
 
-    @Ignore
+
     public void setId(long id)
     {
         this.id = id;
     }
 
-    @Ignore
+
     public void setName(String name)
     {
         this.name = name;
