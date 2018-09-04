@@ -37,55 +37,6 @@ public class Activity_News extends AppCompatActivity{
 
     private List<Map<String,Object> > newsList = new ArrayList<Map<String,Object> >();
 
-    public void updateShow()
-    {
-        showList(mRssFeed.getItems());
-    }
-
-    private void showList(final List<RssItem> itemList)
-    {
-        newsList.clear();
-
-        for (int i=0;i<itemList.size();i++)
-        {
-            Map<String,Object> item = new HashMap<String,Object>();
-            //一行记录，包含多个控件
-            item.put("title", itemList.get(i).getTitle());
-            item.put("pubDate", itemList.get(i).getPubdate());
-
-            newsList.add(item);
-
-        }
-
-        ListView lv = (ListView)findViewById(R.id.news_list);
-        SimpleAdapter sa = new SimpleAdapter(this,
-                newsList,//data 不仅仅是数据，而是一个与界面耦合的数据混合体
-                R.layout.fragment_news_display,
-                new String[] {"title","pubDate"},//from 从来来
-                new int[] {R.id.news_title,R.id.news_date}//to 到那里去
-        );
-        lv.setAdapter(sa);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                RssItem item = itemList.get(i);
-
-                view.setBackgroundColor(getColor(R.color.colorClickedItem));
-
-                Intent intent = new Intent(view.getContext(), NewsDetailActivity.class);
-                intent.putExtra("title", item.getTitle());
-                intent.putExtra("description", item.getDescription());
-                intent.putExtra("pubDate", item.getPubdate());
-                intent.putExtra("link", item.getLink());
-
-                DatabaseHandler.readNews(item, getApplicationContext());
-
-                startActivity(intent);
-            }
-        });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -191,7 +142,7 @@ public class Activity_News extends AppCompatActivity{
     public View onCreateView(String name, Context context, AttributeSet attrs) {
 
 
-        //Log.e("create View", "create main view");
+        Log.e("create View", "create main view");
 
         return super.onCreateView(name, context, attrs);
     }
