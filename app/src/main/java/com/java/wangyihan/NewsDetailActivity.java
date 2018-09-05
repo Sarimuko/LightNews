@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         //author = intent.getStringExtra("author");
         description = intent.getStringExtra("description");
         link = intent.getStringExtra("link");
+        username = intent.getStringExtra("username");
 
 
         TextView titleView = findViewById(R.id.news_detail_title);
@@ -85,6 +87,8 @@ public class NewsDetailActivity extends AppCompatActivity {
                 item.setDescription(description);
                 item.setLink(link);
                 item.setPubdate(pubDate);
+
+                Log.e("user favorate", username);
 
                 DatabaseHandler.favorateNews(username, item, getApplicationContext());
             }

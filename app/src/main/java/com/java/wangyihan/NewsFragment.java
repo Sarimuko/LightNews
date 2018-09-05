@@ -37,7 +37,7 @@ public class NewsFragment extends Fragment {
     private static final String ARG_LINKS = "links";
     private static final String ARG_NAMES = "names";
 
-    private String username;
+    private String username = "default user";
 
     private View root;
     private Context rootContext;
@@ -95,6 +95,7 @@ public class NewsFragment extends Fragment {
     public void showFavorate(String username)
     {
         mRssFeed = new RssFeed();
+        Log.e("username", username);
         mRssFeed.setRssItems(DatabaseHandler.getFavorateByUser(rootContext.getApplicationContext(), username));
 
         update();
@@ -173,7 +174,7 @@ public class NewsFragment extends Fragment {
                 intent.putExtra("description", item.getDescription());
                 intent.putExtra("pubDate", item.getPubdate());
                 intent.putExtra("link", item.getLink());
-                //intent.putExtra("link", )
+                intent.putExtra("username", username);
 
                 DatabaseHandler.readNews(item, rootContext.getApplicationContext());
 

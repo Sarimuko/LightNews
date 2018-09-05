@@ -141,17 +141,18 @@ public class NavigationActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_favorate) {
 
-            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
             newsFragment.setUsername(user);
             newsFragment.showFavorate(user);
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
 
         } else if (id == R.id.nav_sign) {
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, loginFragment).commit();
 
         } else if (id == R.id.nav_local) {
-            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
+
             newsFragment.setUsername(user);
             newsFragment.showFavorate(user);
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
 
         } else if (id == R.id.nav_recommend) {
 
@@ -159,9 +160,9 @@ public class NavigationActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_home)
         {
-            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
             newsFragment.refetch();
             newsFragment.update();
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -192,9 +193,11 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(String user, String email) {
         TextView userText = navigationView.getHeaderView(0).findViewById(R.id.username_text);
+        this.user = user;
         userText.setText(user);
 
         TextView emailText = navigationView.getHeaderView(0).findViewById(R.id.email_address_text);
+        this.email = email;
         emailText.setText(email);
     }
 }
