@@ -86,7 +86,18 @@ public class NewsFragment extends Fragment {
 
     }
 
-    public void updateShow ()
+    public void showFavorate()
+    {
+        mRssFeed = new RssFeed();
+        mRssFeed.setRssItems(DatabaseHandler.getAllFavorate(rootContext.getApplicationContext()));
+
+        update();
+
+    }
+
+
+
+    public void refetch()
     {
         mRssFeed = new RssFeed();
         try
@@ -107,13 +118,16 @@ public class NewsFragment extends Fragment {
                 Log.e("info", "get date from database" + Integer.toString(mRssFeed.getItemCount()));
             }
 
-
-            showList(mRssFeed.getItems());
         }
         catch (Exception e)
         {
             Log.e("E", e.getMessage());
         }
+    }
+
+    public void update ()
+    {
+        showList(mRssFeed.getItems());
     }
 
     private void showList(final List<RssItem> itemList)
@@ -166,7 +180,8 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_news, container, false);
-        updateShow();
+        refetch();
+        update();
 
         SearchView searchView = root.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -175,7 +190,8 @@ public class NewsFragment extends Fragment {
                 if(TextUtils.isEmpty(query))
                 {
                     Toast.makeText(rootContext, "请输入查找内容！", Toast.LENGTH_SHORT).show();
-                    updateShow();
+                    refetch();
+                    update();
                 }
                 else
                 {

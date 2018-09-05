@@ -22,6 +22,13 @@ import java.util.ArrayList;
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NewsFragment.OnFragmentInteractionListener{
 
+
+    private String user = "default user";
+    private String email = "default email";
+
+    private NewsFragment newsFragment;
+    private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +37,7 @@ public class NavigationActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.nav_view);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -56,7 +64,7 @@ public class NavigationActivity extends AppCompatActivity
         ArrayList<String> nameList = new ArrayList<String>();
         nameList.add("国内新闻");
 
-        NewsFragment newsFragment = NewsFragment.newInstance(1, testLinks, nameList);
+        newsFragment = NewsFragment.newInstance(1, testLinks, nameList);
         getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
 
 
@@ -64,13 +72,13 @@ public class NavigationActivity extends AppCompatActivity
         Intent intent = getIntent();
         if (intent != null)
         {
-            String user = intent.getStringExtra("username");
-            String email = intent.getStringExtra("email");
+            user = intent.getStringExtra("username");
+            email = intent.getStringExtra("email");
 
-            TextView userText = findViewById(R.id.username_text);
+            TextView userText = navigationView.getHeaderView(0).findViewById(R.id.username_text);
             userText.setText(user);
 
-            TextView emailText = findViewById(R.id.email_address_text);
+            TextView emailText = navigationView.getHeaderView(0).findViewById(R.id.email_address_text);
             emailText.setText(email);
         }
     }
@@ -113,18 +121,25 @@ public class NavigationActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_categories) {
 
-        } else if (id == R.id.nav_slideshow) {
+            
+        } else if (id == R.id.nav_favorate) {
 
-        } else if (id == R.id.nav_manage) {
+            newsFragment.showFavorate();
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_sign) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_local) {
 
+        } else if (id == R.id.nav_recommend) {
+
+        } else if (id == R.id.nav_categories_setting) {
+
+        } else if (id == R.id.nav_home)
+        {
+            newsFragment.refetch();
+            newsFragment.update();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
