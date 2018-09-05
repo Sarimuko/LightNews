@@ -5,7 +5,7 @@ import com.java.wangyihan.Data.Category;
 import com.java.wangyihan.Data.FavorateNews;
 import com.java.wangyihan.Data.RssItem;
 import com.java.wangyihan.Data.User;
-import com.java.wangyihan.MD5Utils;
+import com.java.wangyihan.Util.MD5Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,16 +32,34 @@ public class DatabaseHandler {
     }
 
 
-    public static void favorateNews(RssItem item, Context context)
+    public static void favorateNews(String username, RssItem item, Context context)
     {
         List<FavorateNews> mNews = new ArrayList<FavorateNews>();
-        mNews.add(new FavorateNews(item));
+        long cnt = NewsDatabase.getInstance(context).getFavorateNewsDao().getFavorateCount();
+        FavorateNews favorateNews = new FavorateNews(item, cnt);
+        favorateNews.setOwnerName(username);
+
+        mNews.add(favorateNews);
         NewsDatabase.getInstance(context).getFavorateNewsDao().insert(mNews);
     }
 
     public static List<RssItem> getAllFavorate(Context context)
     {
         List<FavorateNews> fList = NewsDatabase.getInstance(context).getFavorateNewsDao().getAll();
+        List<RssItem> itemList = new ArrayList<RssItem>();
+
+        for (FavorateNews f: fList)
+        {
+            itemList.add(new RssItem(f));
+        }
+
+        return itemList;
+    }
+
+    public static List<RssItem> getFavorateByUser(Context context, String username)
+    {
+
+        List<FavorateNews> fList = NewsDatabase.getInstance(context).getFavorateNewsDao().getAllByOwners(username);
         List<RssItem> itemList = new ArrayList<RssItem>();
 
         for (FavorateNews f: fList)
@@ -79,18 +97,23 @@ public class DatabaseHandler {
         NewsDatabase.getInstance(context).getUserDao().insert(list);
     }
 
-    public static boolean hasUser(String username, String password, Context context)
+    public static int hasUser(String username, String email, String password, Context context)
     {
         password = MD5Utils.stringToMD5(password);
         String[] user = {username};
         List<User> list = NewsDatabase.getInstance(context).getUserDao().getAllByName(user);
 
         if (list.isEmpty())
-            return false;
+            return 0;//没有
 
-        if (!password.equals(list.get(0).getPassword()) || !username.equals(list.get(0).getUsername()))
-            return false;
-        return true;
+        if (!password.equals(list.get(0).getPassword()) ||!email.equals(list.get(0).getEmail()))
+            return -1;//失败
+        return 1;
+    }
+
+    public static List<Category> getAllCategories(Context context)
+    {
+        return NewsDatabase.getInstance(context).getCategoryDao().getAll();
     }
 
 

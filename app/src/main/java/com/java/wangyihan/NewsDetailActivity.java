@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.java.wangyihan.Data.DataBaseHandler.DatabaseHandler;
 import com.java.wangyihan.Data.RssItem;
+import com.java.wangyihan.Util.WXTool;
+
 
 public class NewsDetailActivity extends AppCompatActivity {
     private String title;
@@ -18,6 +20,8 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String author;
     private String description;
     private String link;
+
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,15 @@ public class NewsDetailActivity extends AppCompatActivity {
                 item.setLink(link);
                 item.setPubdate(pubDate);
 
-                DatabaseHandler.favorateNews(item, getApplicationContext());
+                DatabaseHandler.favorateNews(username, item, getApplicationContext());
+            }
+        });
+
+        Button shareButton = findViewById(R.id.share_wechat_button);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WXTool.getInstance(getApplicationContext()).shareUrl(1, getApplicationContext(), link, title, description);
             }
         });
 

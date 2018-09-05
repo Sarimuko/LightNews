@@ -1,4 +1,4 @@
-package com.java.wangyihan;
+package com.java.wangyihan.Util;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

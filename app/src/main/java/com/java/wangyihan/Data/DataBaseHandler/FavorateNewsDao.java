@@ -20,6 +20,9 @@ public interface FavorateNewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<FavorateNews> entities);
 
+    @Query("SELECT * FROM tb_favorate_news WHERE ownerName = :owner")
+    List<FavorateNews> getAllByOwners(String owner);
+
     @Delete
     void delete(FavorateNews entity);
 

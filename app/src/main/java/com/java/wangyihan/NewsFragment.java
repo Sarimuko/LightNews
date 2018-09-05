@@ -37,6 +37,8 @@ public class NewsFragment extends Fragment {
     private static final String ARG_LINKS = "links";
     private static final String ARG_NAMES = "names";
 
+    private String username;
+
     private View root;
     private Context rootContext;
 
@@ -54,6 +56,10 @@ public class NewsFragment extends Fragment {
 
     public NewsFragment() {
         // Required empty public constructor
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
@@ -86,10 +92,10 @@ public class NewsFragment extends Fragment {
 
     }
 
-    public void showFavorate()
+    public void showFavorate(String username)
     {
         mRssFeed = new RssFeed();
-        mRssFeed.setRssItems(DatabaseHandler.getAllFavorate(rootContext.getApplicationContext()));
+        mRssFeed.setRssItems(DatabaseHandler.getFavorateByUser(rootContext.getApplicationContext(), username));
 
         update();
 
@@ -167,6 +173,7 @@ public class NewsFragment extends Fragment {
                 intent.putExtra("description", item.getDescription());
                 intent.putExtra("pubDate", item.getPubdate());
                 intent.putExtra("link", item.getLink());
+                //intent.putExtra("link", )
 
                 DatabaseHandler.readNews(item, rootContext.getApplicationContext());
 

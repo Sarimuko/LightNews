@@ -4,11 +4,14 @@ import android.arch.persistence.room.*;
 import android.support.annotation.NonNull;
 
 
-@Entity(tableName = "tb_favorate_news", indices = @Index(value = {"link"}, unique = true))
+@Entity(tableName = "tb_favorate_news")
 public class FavorateNews {
 
     @PrimaryKey
     @NonNull
+    long id;
+
+    @ColumnInfo
     private String title;
     @ColumnInfo
     private String description;
@@ -18,6 +21,8 @@ public class FavorateNews {
     private String category;
     @ColumnInfo
     private String pubdate;
+    @ColumnInfo
+    private String ownerName;
 
 
     public String getTitle() {
@@ -27,14 +32,32 @@ public class FavorateNews {
         return title;
     }
 
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    @NonNull
+    public long getId() {
+        return id;
+    }
+
+    public void setId(@NonNull long id) {
+        this.id = id;
+    }
+
     @Ignore
-    public FavorateNews(RssItem item)
+    public FavorateNews(RssItem item, long id)
     {
         this.title = item.getTitle();
         this.description = item.getDescription();
         this.category = item.getCategory();
         this.link = item.getLink();
         this.pubdate = item.getPubdate();
+        this.id = id;
     }
 
 

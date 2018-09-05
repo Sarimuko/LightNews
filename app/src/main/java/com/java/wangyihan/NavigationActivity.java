@@ -20,20 +20,31 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class NavigationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, NewsFragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, NewsFragment.OnFragmentInteractionListener, CategoryListFragment.OnFragmentInteractionListener
+, LoginFragment.OnFragmentInteractionListener{
 
 
     private String user = "default user";
     private String email = "default email";
 
     private NewsFragment newsFragment;
+    private CategoryListFragment categoryListFragment = CategoryListFragment.newInstance();
     private NavigationView navigationView;
+    private LoginFragment loginFragment = LoginFragment.newInstance();
+
+    private ArrayList<String> testLinks = new ArrayList<String>();
+    private ArrayList<String> nameList = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Log.e("nav", "create navigation view");
+
+
+        testLinks.add("http://news.qq.com/newsgn/rss_newsgn.xml");
+        nameList.add("国内新闻");
 
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -58,11 +69,6 @@ public class NavigationActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ArrayList<String> testLinks = new ArrayList<String>();
-        testLinks.add("http://news.qq.com/newsgn/rss_newsgn.xml");
-
-        ArrayList<String> nameList = new ArrayList<String>();
-        nameList.add("国内新闻");
 
         newsFragment = NewsFragment.newInstance(1, testLinks, nameList);
         getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
@@ -81,6 +87,14 @@ public class NavigationActivity extends AppCompatActivity
             TextView emailText = navigationView.getHeaderView(0).findViewById(R.id.email_address_text);
             emailText.setText(email);
         }
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     @Override
@@ -122,15 +136,22 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_categories) {
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, categoryListFragment).commit();
 
-            
+
         } else if (id == R.id.nav_favorate) {
 
-            newsFragment.showFavorate();
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
+            newsFragment.setUsername(user);
+            newsFragment.showFavorate(user);
 
         } else if (id == R.id.nav_sign) {
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, loginFragment).commit();
 
         } else if (id == R.id.nav_local) {
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
+            newsFragment.setUsername(user);
+            newsFragment.showFavorate(user);
 
         } else if (id == R.id.nav_recommend) {
 
@@ -138,6 +159,7 @@ public class NavigationActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_home)
         {
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
             newsFragment.refetch();
             newsFragment.update();
         }
@@ -147,8 +169,32 @@ public class NavigationActivity extends AppCompatActivity
         return true;
     }
 
+
+    @Override
+    public void onFragmentInteraction(String name, String link, boolean checked) {
+        if (!checked && nameList.contains(name))
+        {
+            nameList.remove(name);
+            testLinks.remove(link);
+        }
+        else if (checked && !nameList.contains(name))
+        {
+            nameList.add(name);
+            testLinks.add(link);
+        }
+    }
+
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onFragmentInteraction(String user, String email) {
+        TextView userText = navigationView.getHeaderView(0).findViewById(R.id.username_text);
+        userText.setText(user);
+
+        TextView emailText = navigationView.getHeaderView(0).findViewById(R.id.email_address_text);
+        emailText.setText(email);
     }
 }

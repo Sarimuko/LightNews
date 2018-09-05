@@ -44,15 +44,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:id="@+id/link_button"
                         android:layout_gravity="right" android:textSize="14sp" android:layout_weight="1"
-                        app:layout_constraintStart_toEndOf="@+id/favorate_button" android:layout_marginStart="32dp"
+                        app:layout_constraintStart_toEndOf="@+id/favorate_button"
                         android:layout_alignParentRight="true"/>
                 <Button
                         android:text="收藏"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:id="@+id/favorate_button"
                         android:layout_weight="1"
-                        android:layout_marginStart="10dp"
                         android:layout_toLeftOf="@id/link_button"/>
+                <Button
+                        android:text="分享到微信"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/share_wechat_button"
+                        android:layout_toLeftOf="@id/favorate_button"/>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
