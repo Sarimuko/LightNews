@@ -29,27 +29,30 @@ public class WXTool {
 
     private OnResponseListener listener;
     private ResponseReceiver receiver;
+    private Context context;
 
 
     public void registerWeChat(Context context) {   //向微信注册app
-        api = WXAPIFactory.createWXAPI(context, APP_ID, true);
+        api = WXAPIFactory.createWXAPI(context, APP_ID, false);
         api.registerApp(APP_ID);
     }
 
     private static WXTool instance;
 
-    public static WXTool getInstance(Context context)
+    public static WXTool getInstance()
     {
-        if (instance == null)
-        {
-            instance = new WXTool();
-            instance.registerWeChat(context);
-        }
-
         return instance;
     }
 
-    public void shareUrl(int flag,Context context,String url,String title,String description){
+    public static void register(Context context)
+    {
+
+        instance = new WXTool();
+        instance.registerWeChat(context);
+        instance.context = context;
+    }
+
+    public void shareUrl(int flag,String url,String title,String description){
         //初始化一个WXWebpageObject填写url
         WXWebpageObject webpageObject = new WXWebpageObject();
         webpageObject.webpageUrl = url;

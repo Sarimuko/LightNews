@@ -31,6 +31,11 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
+                android:name="com.java.wangyihan.wxapi.WXEntryActivity"
+                android:exported="true">
+
+        </activity>
+        <activity
                 android:name=".NavigationActivity"
                 android:label="@string/title_activity_navigation"
                 android:theme="@style/AppTheme.NoActionBar">
@@ -39,8 +44,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity android:name=".WXEntryActivity">
         </activity>
     </application>
 

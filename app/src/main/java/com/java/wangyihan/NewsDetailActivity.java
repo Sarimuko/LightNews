@@ -98,7 +98,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WXTool.getInstance(getApplicationContext()).shareUrl(1, getApplicationContext(), link, title, description);
+                WXTool.getInstance().shareUrl(1, link, title, description);
             }
         });
 

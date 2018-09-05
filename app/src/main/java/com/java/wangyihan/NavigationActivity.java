@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import com.java.wangyihan.Util.WXTool;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,8 @@ public class NavigationActivity extends AppCompatActivity
 
         testLinks.add("http://news.qq.com/newsgn/rss_newsgn.xml");
         nameList.add("国内新闻");
+
+        WXTool.register(this);
 
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

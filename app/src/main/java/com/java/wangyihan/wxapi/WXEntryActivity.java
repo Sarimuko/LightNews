@@ -1,9 +1,11 @@
-package com.java.wangyihan;
+package com.java.wangyihan.wxapi;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import com.java.wangyihan.NavigationActivity;
+import com.java.wangyihan.R;
 import com.java.wangyihan.Util.OnResponseListener;
 import com.java.wangyihan.Util.WXTool;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -18,7 +20,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wxentry);
-        WXTool.getInstance(getApplicationContext()).api.handleIntent(getIntent(), this); //处理微信传回的Intent,当然你也可以在别的地方处理
+        WXTool.getInstance().api.handleIntent(getIntent(), this); //处理微信传回的Intent,当然你也可以在别的地方处理
     }
 
     @Override
