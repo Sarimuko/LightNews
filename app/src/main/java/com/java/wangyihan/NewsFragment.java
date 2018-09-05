@@ -95,8 +95,10 @@ public class NewsFragment extends Fragment {
     public void showFavorate(String username)
     {
         mRssFeed = new RssFeed();
-        Log.e("username", username);
+        //Log.e("username", username);
         mRssFeed.setRssItems(DatabaseHandler.getFavorateByUser(rootContext.getApplicationContext(), username));
+
+        Log.e("nav", "favorate" + Integer.toString(mRssFeed.getItemCount()));
 
         update();
 
@@ -118,11 +120,11 @@ public class NewsFragment extends Fragment {
                 }
             }
 
-            if (mRssFeed == null || mRssFeed.getItemCount() == 0)
+            if (mRssFeed == null)
             {
                 mRssFeed = new RssFeed();
-                mRssFeed.setRssItems(DatabaseHandler.getAllRead(rootContext.getApplicationContext()));
-                Log.e("info", "get date from database" + Integer.toString(mRssFeed.getItemCount()));
+                //mRssFeed.setRssItems(DatabaseHandler.getAllRead(rootContext.getApplicationContext()));
+                //Log.e("info", "get date from database" + Integer.toString(mRssFeed.getItemCount()));
             }
 
         }
@@ -188,8 +190,8 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_news, container, false);
-        refetch();
-        update();
+        //refetch();
+        //update();
 
         SearchView searchView = root.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -198,8 +200,8 @@ public class NewsFragment extends Fragment {
                 if(TextUtils.isEmpty(query))
                 {
                     Toast.makeText(rootContext, "请输入查找内容！", Toast.LENGTH_SHORT).show();
-                    refetch();
-                    update();
+                    //refetch();
+                    //update();
                 }
                 else
                 {

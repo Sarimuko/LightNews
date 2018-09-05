@@ -141,8 +141,12 @@ public class NavigationActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_favorate) {
 
+
+
             newsFragment.setUsername(user);
             newsFragment.showFavorate(user);
+            //Log.e("nav", "favorate" + Integer.toString(newsFragment.mRssFeed.getItemCount()));
+
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
 
         } else if (id == R.id.nav_sign) {
@@ -160,6 +164,7 @@ public class NavigationActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_home)
         {
+            Log.e("nav", "home");
             newsFragment.refetch();
             newsFragment.update();
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
