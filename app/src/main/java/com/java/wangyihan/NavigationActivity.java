@@ -28,10 +28,22 @@ public class NavigationActivity extends AppCompatActivity
     private String user = "default user";
     private String email = "default email";
 
+    enum State{FAVORATE, LOCAL, RECOMMEND, HOME};
+    private State state;
+
+    public State getState() {
+        return state;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
     private NewsFragment newsFragment;
     private CategoryListFragment categoryListFragment = CategoryListFragment.newInstance();
     private NavigationView navigationView;
     private LoginFragment loginFragment = LoginFragment.newInstance();
+    private AddCategoryFragment addCategoryFragment = AddCategoryFragment.newInstance();
 
     private ArrayList<String> testLinks = new ArrayList<String>();
     private ArrayList<String> nameList = new ArrayList<String>();
@@ -126,6 +138,7 @@ public class NavigationActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, addCategoryFragment).commit();
             return true;
         }
 
@@ -146,6 +159,7 @@ public class NavigationActivity extends AppCompatActivity
 
 
 
+            state = State.FAVORATE;
             newsFragment.setUsername(user);
             newsFragment.showFavorate(user);
             //Log.e("nav", "favorate" + Integer.toString(newsFragment.mRssFeed.getItemCount()));
@@ -157,19 +171,24 @@ public class NavigationActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_local) {
 
-            newsFragment.setUsername(user);
-            newsFragment.showFavorate(user);
+            //todo: local
+            state = State.LOCAL;
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
 
+
         } else if (id == R.id.nav_recommend) {
+            //todo: recommendation
+            state = State.RECOMMEND;
 
         } else if (id == R.id.nav_categories_setting) {
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, addCategoryFragment).commit();
 
         } else if (id == R.id.nav_home)
         {
             Log.e("nav", "home");
+            state = State.HOME;
             newsFragment.refetch();
-            newsFragment.update();
+
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
         }
 

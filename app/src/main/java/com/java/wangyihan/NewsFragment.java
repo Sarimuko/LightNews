@@ -30,7 +30,7 @@ import java.util.Map;
  * Use the {@link NewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements Runnable{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NUM = "linkNum";
@@ -67,8 +67,8 @@ public class NewsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     *
+     *
      * @return A new instance of fragment NewsFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -105,10 +105,8 @@ public class NewsFragment extends Fragment {
 
     }
 
-
-
-    public void refetch()
-    {
+    @Override
+    public void run() {
         mRssFeed = new RssFeed();
         try
         {
@@ -135,8 +133,25 @@ public class NewsFragment extends Fragment {
         }
     }
 
+    public void refetch()
+    {
+        Thread thread = new Thread(this);
+        try
+        {
+            thread.start();
+            thread.join();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        update();
+    }
+
     public void update ()
     {
+        //Log.e("refetched", Integer.toString(mRssFeed.getItemCount()));
         showList(mRssFeed.getItems());
     }
 
@@ -219,8 +234,28 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_news, container, false);
-        //refetch();
-        //update();
+
+        NavigationActivity navigationActivity = (NavigationActivity) rootContext;
+        if (navigationActivity.getState() == NavigationActivity.State.HOME)
+        {
+            refetch();
+        }
+        else if (navigationActivity.getState() == NavigationActivity.State.FAVORATE)
+        {
+            setUsername(navigationActivity.getUser());
+            showFavorate(navigationActivity.getUser());
+        }
+        else if (navigationActivity.getState() == NavigationActivity.State.LOCAL)
+        {
+            //todo: local
+            setUsername(navigationActivity.getUser());
+            showFavorate(navigationActivity.getUser());
+        }
+        else if (navigationActivity.getState() == NavigationActivity.State.RECOMMEND)
+        {
+            //todo:recommend
+        }
+
 
         SearchView searchView = root.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,13 +80,16 @@ public class CategoryListFragment extends Fragment {
         // Inflate the layout for this fragment
 
         root = inflater.inflate(R.layout.fragment_category_list, container, false);
-
+        categoryAdapterList.clear();
         categoryList = DatabaseHandler.getAllCategories(rootContext.getApplicationContext());
+        Log.e("category cnt", Integer.toString(categoryList.size()));
         for (Category category: categoryList)
         {
             Map<String, Object> item = new HashMap<String, Object>();
             item.put("name", category.getName());
             item.put("link", category.getUrl());
+
+            categoryAdapterList.add(item);
         }
 
         ListView lv = (ListView)(root.findViewById(R.id.category_list));
