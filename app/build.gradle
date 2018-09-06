@@ -5,7 +5,7 @@ android {
     buildToolsVersion "27"
     defaultConfig {
         applicationId "com.java.wangyihan"
-        minSdkVersion 27
+        minSdkVersion 23
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -32,6 +32,8 @@ dependencies {
     compile "android.arch.persistence.room:runtime:$rootProject.roomVersion"
     compile 'com.android.support.constraint:constraint-layout:1.1.2+'
     compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'org.jsoup:jsoup:1.11.3'
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
 
     // Dependencies for local unit tests

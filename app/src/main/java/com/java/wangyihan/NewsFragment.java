@@ -45,6 +45,7 @@ public class NewsFragment extends Fragment {
     RssFeed mRssFeed;
     List<RssItem> findList = new ArrayList<RssItem>();
     private List<Map<String,Object> > newsList = new ArrayList<Map<String,Object> >();
+    List<Long> readList = new ArrayList<Long>();
 
 
     // TODO: Rename and change types of parameters
@@ -154,12 +155,38 @@ public class NewsFragment extends Fragment {
 
         }
 
+        class MySimpleAdapter extends SimpleAdapter
+        {
+            MySimpleAdapter(Context context, List<Map<String, Object>> dataList, int id, String[] headers, int[] view_ids)
+            {
+                super(context, dataList, id, headers, view_ids);
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                View view = super.getView(position, convertView, parent);
+                if (readList.contains(getItemId(position)))
+                {
+                    view.setBackgroundColor(rootContext.getColor(R.color.colorClickedItem));
+                }
+                else
+                {
+                    view.setBackgroundColor(rootContext.getColor(R.color.cardview_light_background));
+                }
+
+                return view;
+
+            }
+        }
+
         ListView lv = (ListView)(root.findViewById(R.id.news_list));
-        SimpleAdapter sa = new SimpleAdapter(rootContext,
+        final MySimpleAdapter sa = new MySimpleAdapter(rootContext,
                 newsList,//data 不仅仅是数据，而是一个与界面耦合的数据混合体
                 R.layout.fragment_news_display,
                 new String[] {"title","pubDate"},//from 从来来
                 new int[] {R.id.news_title,R.id.news_date}//to 到那里去
+
         );
         lv.setAdapter(sa);
 
@@ -169,7 +196,9 @@ public class NewsFragment extends Fragment {
 
                 RssItem item = itemList.get(i);
 
-                view.setBackgroundColor(rootContext.getColor(R.color.colorClickedItem));
+                //view.setBackgroundColor(rootContext.getColor(R.color.colorClickedItem));
+                readList.add(l);
+                sa.notifyDataSetChanged();
 
                 Intent intent = new Intent(view.getContext(), NewsDetailActivity.class);
                 intent.putExtra("title", item.getTitle());

@@ -52,12 +52,7 @@ public class RssFeed_SAXParser implements Runnable{
         //for test
         rssHandler.rssFeed = null;
         mUrl = urlStr;
-        /*BufferedReader bin = new BufferedReader(new InputStreamReader(url.openStream()));
-        String line;
-        while ((line = bin.readLine()) != null)
-        {
-            System.out.println(line);
-        }*/
+
         Thread thread = new Thread(this);
         thread.start();
 
