@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import com.java.wangyihan.Data.Category;
 import com.java.wangyihan.Data.DataBaseHandler.DatabaseHandler;
 import com.java.wangyihan.Data.RssItem;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,9 +54,7 @@ public class CategoryListFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+
      * @return A new instance of fragment CategoryListFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -82,12 +83,17 @@ public class CategoryListFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_category_list, container, false);
         categoryAdapterList.clear();
         categoryList = DatabaseHandler.getAllCategories(rootContext.getApplicationContext());
+
+        NavigationActivity navigationActivity = (NavigationActivity)rootContext;
+        navigationActivity.categoryList.clear();
+
         Log.e("category cnt", Integer.toString(categoryList.size()));
         for (Category category: categoryList)
         {
             Map<String, Object> item = new HashMap<String, Object>();
             item.put("name", category.getName());
             item.put("link", category.getUrl());
+            item.put("id", Long.toString(category.getId()));
 
             categoryAdapterList.add(item);
         }
@@ -96,22 +102,27 @@ public class CategoryListFragment extends Fragment {
         SimpleAdapter sa = new SimpleAdapter(rootContext,
                 categoryAdapterList,//data 不仅仅是数据，而是一个与界面耦合的数据混合体
                 R.layout.fragment_category_checkbox,
-                new String[] {"name", "link"},//from 从来来
-                new int[] {R.id.checkable_category, R.id.category_link}//to 到那里去
+                new String[] {"name", "link", "id"},//from 从来来
+                new int[] {R.id.checkable_category, R.id.category_link, R.id.category_id}//to 到那里去
         );
+
+
         lv.setAdapter(sa);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                CheckedTextView check = (CheckedTextView)(view.findViewById(R.id.checkable_category));
+                CheckBox check = view.findViewById(R.id.checkable_category);
+                TextView idView = view.findViewById(R.id.category_id);
                 TextView textView = view.findViewById(R.id.category_link);
                 check.setChecked(!check.isChecked());
 
+                //throw new RuntimeException();
+
                 if (mListener != null)
                 {
-                    mListener.onFragmentInteraction(check.getText().toString(), textView.getText().toString(), check.isChecked());
+                    mListener.onFragmentInteraction(check.getText().toString(), textView.getText().toString(), Integer.parseInt(idView.getText().toString()), check.isChecked());
                 }
             }
         });
@@ -153,6 +164,6 @@ public class CategoryListFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(String name, String link, boolean checked);
+        void onFragmentInteraction(String name, String link, int id, boolean checked);
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NewsClient</string>
+    <string name="app_name">LightNews</string>
     <string name="title_activity__news">Activity_News</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -10,9 +10,9 @@
 
     <string name="category_domestic_url">feed://news.qq.com/newsgn/rss_newsgn.xml</string>
     <string name="category_movie_url">feed://ent.qq.com/movie/rss_movie.xml</string>
-    <string name="title_activity_news_detail">NewsDetailActivity</string>
-    <string name="title_activity_original_news">OriginalNewsActivity</string>
-    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="title_activity_news_detail">新闻详情</string>
+    <string name="title_activity_original_news">新闻原文</string>
+    <string name="title_activity_navigation">首页</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -40,28 +40,28 @@ public class RssHandler extends DefaultHandler {
         super.characters(ch, start, length);
         // 获取字符串
         String text = new String(ch, start, length);
-        //System.out.println("要获取的内容：" + text);
+        //Log.e("要获取的内容：" , text);
 
         switch (currentFlag) {
             case RSS_TITLE:
-                rssItem.setTitle(text);
-                currentFlag = 0;// 设置完后，重置为开始状态
+                rssItem.setTitle(rssItem.getTitle() + text);
+                //currentFlag = 0;// 设置完后，重置为开始状态
                 break;
             case RSS_PUBDATE:
-                rssItem.setPubdate(text);
-                currentFlag = 0;// 设置完后，重置为开始状态
+                rssItem.setPubdate(rssItem.getPubdate() + text);
+                //currentFlag = 0;// 设置完后，重置为开始状态
                 break;
             case RSS_CATEGORY:
-                rssItem.setCategory(text);
-                currentFlag = 0;// 设置完后，重置为开始状态
+                rssItem.setCategory(rssItem.getCategory() + text);
+                //currentFlag = 0;// 设置完后，重置为开始状态
                 break;
             case RSS_LINK:
-                rssItem.setLink(text);
-                currentFlag = 0;// 设置完后，重置为开始状态
+                rssItem.setLink(rssItem.getLink() + text);
+                //currentFlag = 0;// 设置完后，重置为开始状态
                 break;
             case RSS_DESCRIPTION:
-                rssItem.setDescription(text);
-                currentFlag = 0;// 设置完后，重置为开始状态
+                rssItem.setDescription(rssItem.getDescription() + text);
+                //currentFlag = 0;// 设置完后，重置为开始状态
                 break;
             default:
                 break;
@@ -73,6 +73,7 @@ public class RssHandler extends DefaultHandler {
                              Attributes attributes) throws SAXException {
         super.startElement(uri, localName, qName, attributes);
         //System.out.println(localName + " " + qName);
+        //Log.e(localName, qName);
         if ("chanel".equals(qName)) {
             // 这个标签内没有我们关心的内容，所以不作处理，currentFlag=0
             currentFlag = 0;
@@ -80,7 +81,9 @@ public class RssHandler extends DefaultHandler {
         }
         if ("item".equals(qName)) {
             rssItem = new RssItem();
+            //Log.e(localName, qName);
             //System.out.println("get item");
+            currentFlag = 0;
             return;
         }
         if ("title".equals(qName)) {
@@ -113,9 +116,32 @@ public class RssHandler extends DefaultHandler {
         // 如果解析一个item节点结束，就将rssItem添加到rssFeed中。
         if ("item".equals(qName)) {
 
+            if (rssFeed == null)
+                rssFeed = new RssFeed();
             rssFeed.addItem(rssItem);
             return;
         }
+        if ("title".equals(qName)) {
+            currentFlag = 0;
+            return;
+        }
+        if ("description".equals(qName)) {
+            currentFlag = 0;
+            return;
+        }
+        if ("link".equals(qName)) {
+            currentFlag = 0;
+            return;
+        }
+        if ("pubDate".equals(qName)) {
+            currentFlag = 0;
+            return;
+        }
+        if ("category".equals(qName)) {
+            currentFlag = 0;
+            return;
+        }
+
     }
 
     @Override

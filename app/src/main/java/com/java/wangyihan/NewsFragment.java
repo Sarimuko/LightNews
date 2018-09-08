@@ -2,24 +2,24 @@ package com.java.wangyihan;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.java.wangyihan.Data.*;
 import com.java.wangyihan.Data.DataBaseHandler.DatabaseHandler;
-import com.java.wangyihan.Data.RssFeed;
-import com.java.wangyihan.Data.RssFeed_SAXParser;
-import com.java.wangyihan.Data.RssItem;
+import com.java.wangyihan.Util.Tools;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -30,14 +30,19 @@ import java.util.Map;
  * Use the {@link NewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
 public class NewsFragment extends Fragment implements Runnable{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_NUM = "linkNum";
+    //private static final String ARG_NUM = "linkNum";
     private static final String ARG_LINKS = "links";
     private static final String ARG_NAMES = "names";
+    private static final String ARG_IDS = "IDs";
 
-    private String username = "default user";
+    static boolean startFlag = true;
+
+    //private String username = "default user";
 
     private View root;
     private Context rootContext;
@@ -45,13 +50,50 @@ public class NewsFragment extends Fragment implements Runnable{
     RssFeed mRssFeed;
     List<RssItem> findList = new ArrayList<RssItem>();
     private List<Map<String,Object> > newsList = new ArrayList<Map<String,Object> >();
-    List<Long> readList = new ArrayList<Long>();
+    List<String> readList = new ArrayList<String>();
+    int pos = 0;
 
 
     // TODO: Rename and change types of parameters
     private int mNum = 0;
     private ArrayList<String> mLinks;
-    private ArrayList<String> mNames;
+    //private ArrayList<String> mNames;
+    private ArrayList<Integer> mIDs;
+
+    public void showRecommend(User user)
+    {
+        for (int i=0;i<3;i++)
+        {
+            Category category = user.getRecommend(rootContext.getApplicationContext());
+            if (category != null)
+            {
+                mLinks.add(category.getUrl());
+                mIDs.add(new Long(category.getId()).intValue());
+            }
+        }
+
+        refetch();
+    }
+
+    private Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    //完成主界面更新,拿到数据
+                    String data = (String)msg.obj;
+
+                    update();
+                    //textView.setText(data);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,8 +101,36 @@ public class NewsFragment extends Fragment implements Runnable{
         // Required empty public constructor
     }
 
-    public void setUsername(String username) {
+    /*public void setUsername(String username) {
         this.username = username;
+    }*/
+
+    class MySimpleAdapter extends SimpleAdapter
+    {
+        NavigationActivity navigationActivity = (NavigationActivity) rootContext;
+
+        MySimpleAdapter(Context context, List<Map<String, Object>> dataList, int id, String[] headers, int[] view_ids)
+        {
+            super(context, dataList, id, headers, view_ids);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            View view = super.getView(position, convertView, parent);
+            HashMap<String, Object> item = (HashMap<String, Object>)getItem(position);
+            if (readList.contains(item.get("title")) && navigationActivity.getState() != NavigationActivity.State.FAVORATE && navigationActivity.getState() != NavigationActivity.State.LOCAL)
+            {
+                view.setBackgroundColor(rootContext.getColor(R.color.colorClickedItem));
+            }
+            else
+            {
+                view.setBackgroundColor(rootContext.getColor(R.color.cardview_light_background));
+            }
+
+            return view;
+
+        }
     }
 
     /**
@@ -72,12 +142,28 @@ public class NewsFragment extends Fragment implements Runnable{
      * @return A new instance of fragment NewsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewsFragment newInstance(int num, ArrayList<String> links, ArrayList<String> names) {
+    public static NewsFragment newInstance(ArrayList<Category> categories) {
         NewsFragment fragment = new NewsFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_NUM, num);
+        //args.putInt(ARG_NUM, num);
+        ArrayList<String> links = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<Integer> IDs = new ArrayList<Integer>();
+        for (Category category: categories)
+        {
+            links.add(category.getUrl());
+            names.add(category.getName());
+            Long id = category.getId();
+            IDs.add(id.intValue());
+        }
+
+
+
         args.putStringArrayList(ARG_LINKS, links);
         args.putStringArrayList(ARG_NAMES, names);
+        args.putIntegerArrayList(ARG_IDS, IDs);
+
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,13 +172,23 @@ public class NewsFragment extends Fragment implements Runnable{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mNum = getArguments().getInt(ARG_NUM);
-            mNames = getArguments().getStringArrayList(ARG_NAMES);
+            //mNames = getArguments().getStringArrayList(ARG_NAMES);
             mLinks = getArguments().getStringArrayList(ARG_LINKS);
+            mIDs = getArguments().getIntegerArrayList(ARG_IDS);
         }
 
     }
 
+    public void showLocal()
+    {
+        mRssFeed = new RssFeed();
+        //Log.e("username", username);
+        mRssFeed.setRssItems(DatabaseHandler.getAllRead(rootContext.getApplicationContext()));
+
+        Log.e("nav", "local" + Integer.toString(mRssFeed.getItemCount()));
+
+        update();
+    }
     public void showFavorate(String username)
     {
         mRssFeed = new RssFeed();
@@ -108,11 +204,13 @@ public class NewsFragment extends Fragment implements Runnable{
     @Override
     public void run() {
         mRssFeed = new RssFeed();
+        Log.e("mLink", Integer.toString(mLinks.size()));
         try
         {
-            for (int i=0;i<mNum;i++)
+            for (int i=0;i<mLinks.size();i++)
             {
-                RssFeed rssFeed = RssFeed_SAXParser.getInstance().getFeed(mLinks.get(i));
+                RssFeed rssFeed = RssFeed_SAXParser.getInstance().getFeed(mLinks.get(i), mIDs.get(i));
+                Log.e("get rssFeed", Integer.toString(rssFeed.getItemCount()));
                 for (int j=0;j<rssFeed.getItemCount();j++)
                 {
                     mRssFeed.addItem(rssFeed.getItem(j));
@@ -122,32 +220,74 @@ public class NewsFragment extends Fragment implements Runnable{
             if (mRssFeed == null)
             {
                 mRssFeed = new RssFeed();
-                //mRssFeed.setRssItems(DatabaseHandler.getAllRead(rootContext.getApplicationContext()));
-                //Log.e("info", "get date from database" + Integer.toString(mRssFeed.getItemCount()));
             }
 
-        }
-        catch (Exception e)
-        {
-            Log.e("E", e.getMessage());
-        }
-    }
-
-    public void refetch()
-    {
-        Thread thread = new Thread(this);
-        try
-        {
-            thread.start();
-            thread.join();
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
 
-        update();
+        Log.e("mRssFeed", Integer.toString(mRssFeed.getItemCount()));
+
+        mHandler.sendEmptyMessage(0);
     }
+
+    public boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
+    }
+
+    public void showHome()
+    {
+        NavigationActivity navigationActivity = (NavigationActivity)rootContext;
+        List<Category> categoryList = navigationActivity.categoryList;
+
+        mLinks.clear();
+        for (Category category: categoryList)
+        {
+            if (Tools.isURL(category.getUrl()))
+            {
+                mLinks.add(category.getUrl());
+                mIDs.add((new Long(category.getId()).intValue()));
+                //Log.e("valid url", category.getUrl());
+            }
+        }
+
+        Log.e("count of mLinks", Integer.toString(mLinks.size()));
+
+        refetch();
+    }
+
+    public void refetch()
+    {
+        if (!isNetworkConnected(rootContext.getApplicationContext()))
+        {
+            Toast.makeText(rootContext, "无网络连接", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Thread thread = new Thread(this);
+        try
+        {
+            thread.start();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        //update();
+    }
+
+
 
     public void update ()
     {
@@ -155,45 +295,47 @@ public class NewsFragment extends Fragment implements Runnable{
         showList(mRssFeed.getItems());
     }
 
-    private void showList(final List<RssItem> itemList)
+    private void nextPage(final List<RssItem> itemList, int pos)
     {
-        newsList.clear();
 
-        for (int i=0;i<itemList.size();i++)
+        ListView lv = root.findViewById(R.id.news_list);
+
+        MySimpleAdapter sa = (MySimpleAdapter)lv.getAdapter();
+        for (int i=pos;i<Math.min(pos + 10, itemList.size());i++)
         {
             Map<String,Object> item = new HashMap<String,Object>();
             //一行记录，包含多个控件
             item.put("title", itemList.get(i).getTitle());
             item.put("pubDate", itemList.get(i).getPubdate());
+            this.pos ++;
 
             newsList.add(item);
 
         }
 
-        class MySimpleAdapter extends SimpleAdapter
+        sa.notifyDataSetChanged();
+
+    }
+
+    private void showList(final List<RssItem> itemList)
+    {
+        Collections.shuffle(itemList);
+        newsList.clear();
+        pos = 0;
+
+        for (int i=0;i<Math.min(10, itemList.size());i++)
         {
-            MySimpleAdapter(Context context, List<Map<String, Object>> dataList, int id, String[] headers, int[] view_ids)
-            {
-                super(context, dataList, id, headers, view_ids);
-            }
+            Map<String,Object> item = new HashMap<String,Object>();
+            //一行记录，包含多个控件
+            item.put("title", itemList.get(i).getTitle());
+            item.put("pubDate", itemList.get(i).getPubdate());
+            pos ++;
 
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            newsList.add(item);
 
-                View view = super.getView(position, convertView, parent);
-                if (readList.contains(getItemId(position)))
-                {
-                    view.setBackgroundColor(rootContext.getColor(R.color.colorClickedItem));
-                }
-                else
-                {
-                    view.setBackgroundColor(rootContext.getColor(R.color.cardview_light_background));
-                }
-
-                return view;
-
-            }
         }
+
+
 
         ListView lv = (ListView)(root.findViewById(R.id.news_list));
         final MySimpleAdapter sa = new MySimpleAdapter(rootContext,
@@ -205,6 +347,32 @@ public class NewsFragment extends Fragment implements Runnable{
         );
         lv.setAdapter(sa);
 
+        lv.setOnScrollListener(new AbsListView.OnScrollListener(){
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState){
+                // 当不滚动时
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    // 判断是否滚动到底部
+                    if (view.getFirstVisiblePosition() == 0) {
+                        //加载更多功能的代码
+                        refetch();
+                        Toast.makeText(rootContext, "刷新成功", Toast.LENGTH_SHORT).show();
+                    }
+                    if (view.getLastVisiblePosition() == view.getCount() - 1)
+                    {
+                        nextPage(itemList, pos);
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
+
+
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -212,17 +380,21 @@ public class NewsFragment extends Fragment implements Runnable{
                 RssItem item = itemList.get(i);
 
                 //view.setBackgroundColor(rootContext.getColor(R.color.colorClickedItem));
-                readList.add(l);
+                readList.add(item.getTitle());
                 sa.notifyDataSetChanged();
 
                 Intent intent = new Intent(view.getContext(), NewsDetailActivity.class);
                 intent.putExtra("title", item.getTitle());
+
+                //Log.e("raw description", item.getDescription());
                 intent.putExtra("description", item.getDescription());
                 intent.putExtra("pubDate", item.getPubdate());
                 intent.putExtra("link", item.getLink());
-                intent.putExtra("username", username);
 
-                DatabaseHandler.readNews(item, rootContext.getApplicationContext());
+                NavigationActivity navigationActivity = (NavigationActivity)rootContext;
+                intent.putExtra("username", navigationActivity.getUser().getUsername());
+
+                DatabaseHandler.readNews(navigationActivity.getUser(), item, rootContext.getApplicationContext());
 
                 startActivity(intent);
             }
@@ -230,31 +402,8 @@ public class NewsFragment extends Fragment implements Runnable{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        root = inflater.inflate(R.layout.fragment_news, container, false);
-
-        NavigationActivity navigationActivity = (NavigationActivity) rootContext;
-        if (navigationActivity.getState() == NavigationActivity.State.HOME)
-        {
-            refetch();
-        }
-        else if (navigationActivity.getState() == NavigationActivity.State.FAVORATE)
-        {
-            setUsername(navigationActivity.getUser());
-            showFavorate(navigationActivity.getUser());
-        }
-        else if (navigationActivity.getState() == NavigationActivity.State.LOCAL)
-        {
-            //todo: local
-            setUsername(navigationActivity.getUser());
-            showFavorate(navigationActivity.getUser());
-        }
-        else if (navigationActivity.getState() == NavigationActivity.State.RECOMMEND)
-        {
-            //todo:recommend
-        }
+    public void onStart() {
+        super.onStart();
 
 
         SearchView searchView = root.findViewById(R.id.search_view);
@@ -298,8 +447,24 @@ public class NewsFragment extends Fragment implements Runnable{
                 return false;
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        root = inflater.inflate(R.layout.fragment_news, container, false);
+        if (startFlag)
+        {
+            NavigationActivity navigationActivity = (NavigationActivity)rootContext;
+            showRecommend(navigationActivity.getUser());
+            startFlag = false;
+        }
+
         return root;
     }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

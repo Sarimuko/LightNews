@@ -12,15 +12,17 @@ public class RssItem implements Parcelable {
 
     @PrimaryKey
     @NonNull
-    private String title;
+    private String title = "";
     @ColumnInfo
-    private String description;
+    private String description = "";
     @ColumnInfo
-    private String link;
+    private String link = "";
     @ColumnInfo
-    private String category;
+    private String category = "";
     @ColumnInfo
-    private String pubdate;
+    private String pubdate = "";
+    @ColumnInfo
+    private long categoryID = 0;
 
     @Ignore
     public static final String TITLE = "title";
@@ -29,6 +31,15 @@ public class RssItem implements Parcelable {
     public RssItem() {
 
     }
+
+    public long getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(long categoryID) {
+        this.categoryID = categoryID;
+    }
+
 
     @Ignore
     @Override
@@ -84,9 +95,6 @@ public class RssItem implements Parcelable {
 
 
     public String getTitle() {
-        if (title.length() > 20) {
-            return title.substring(0, 19) + "...";
-        }
         return title;
     }
 

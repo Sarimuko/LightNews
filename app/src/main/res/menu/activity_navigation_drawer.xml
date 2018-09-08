@@ -4,23 +4,24 @@
       tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item android:title="home" android:id="@+id/nav_home"/>
+        <item android:title="home" android:id="@+id/nav_home" android:icon="@drawable/ic_menu_gallery"/>
         <item
                 android:id="@+id/nav_favorate"
-                android:icon="@drawable/ic_menu_camera"
+                android:icon="@android:drawable/star_big_off"
                 android:title="@string/nav_favorate_title"/>
         <item
                 android:id="@+id/nav_categories"
-                android:icon="@drawable/ic_menu_gallery"
+                android:icon="@android:drawable/ic_menu_sort_by_size"
                 android:title="@string/nav_categories_title"/>
-        <item android:title="@string/nav_recommend_title" android:id="@+id/nav_recommend"/>
+        <item android:title="@string/nav_recommend_title" android:id="@+id/nav_recommend"
+              android:icon="?android:attr/actionModePasteDrawable"/>
         <item
                 android:id="@+id/nav_categories_setting"
-                android:icon="@drawable/ic_menu_slideshow"
+                android:icon="@drawable/ic_menu_manage"
                 android:title="@string/nav_setting_title"/>
         <item
                 android:id="@+id/nav_local"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="?android:attr/actionModeCutDrawable"
                 android:title="@string/nav_local_news_title"/>
     </group>
 

@@ -22,19 +22,22 @@
                     android:layout_height="wrap_content" android:id="@+id/news_detail_title"
                     android:layout_gravity="center_horizontal" android:textSize="30sp" android:textAlignment="center"/>
             <TextView
-                    android:text="这是一个作者"
+                    android:text=""
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/news_detail_author"
-                    android:textAlignment="textEnd"/>
+                    android:textAlignment="textEnd"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"/>
             <TextView
                     android:text="这是一个发布日期"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/news_detail_pubDate"
-                    android:textAlignment="viewEnd"/>
+                    android:textAlignment="viewEnd"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"/>
             <TextView
                     android:text="这是新闻的详细内容hhhhh"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/news_detail_description"/>
+                    android:layout_height="wrap_content" android:id="@+id/news_detail_description"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"/>
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_dialog_alert"
@@ -42,7 +45,8 @@
                     android:layout_gravity="center"/>
             <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:id="@+id/detail_buttons_layout">
+                    android:layout_height="match_parent" android:id="@+id/detail_buttons_layout"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin">
 
                 <Button
                         android:text="阅读原文"

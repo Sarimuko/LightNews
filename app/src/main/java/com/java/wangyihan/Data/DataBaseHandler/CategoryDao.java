@@ -18,6 +18,7 @@ public interface CategoryDao {
     @Query("SELECT count(*) FROM tb_category")
     long getCount();
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Category> entities);
 

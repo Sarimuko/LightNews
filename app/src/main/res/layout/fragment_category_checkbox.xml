@@ -13,10 +13,17 @@
         <CheckBox
                 android:text="CheckBox"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/checkable_category" android:layout_weight="1"/>
+                android:layout_height="wrap_content" android:id="@+id/checkable_category" android:layout_weight="1"
+                android:focusable="false"
+                android:clickable="false"
+                android:focusableInTouchMode="false"/>
         <TextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/category_link" android:layout_weight="1"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/category_id" android:layout_weight="1"/>
     </LinearLayout>
 </FrameLayout>

@@ -16,17 +16,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import com.java.wangyihan.Data.Category;
+import com.java.wangyihan.Data.User;
 import com.java.wangyihan.Util.WXTool;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NewsFragment.OnFragmentInteractionListener, CategoryListFragment.OnFragmentInteractionListener
 , LoginFragment.OnFragmentInteractionListener{
 
 
-    private String user = "default user";
-    private String email = "default email";
+    private static User user;
+    {
+        if (user == null)
+            user = new User("default", "default", "default");
+    }
 
     enum State{FAVORATE, LOCAL, RECOMMEND, HOME};
     private State state;
@@ -35,7 +41,7 @@ public class NavigationActivity extends AppCompatActivity
         return state;
     }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -45,19 +51,15 @@ public class NavigationActivity extends AppCompatActivity
     private LoginFragment loginFragment = LoginFragment.newInstance();
     private AddCategoryFragment addCategoryFragment = AddCategoryFragment.newInstance();
 
-    private ArrayList<String> testLinks = new ArrayList<String>();
-    private ArrayList<String> nameList = new ArrayList<String>();
+    public ArrayList<Category> categoryList = new ArrayList<Category>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Log.e("nav", "create navigation view");
+        //user = new User("default", "default", "default");
 
-
-        testLinks.add("http://news.qq.com/newsgn/rss_newsgn.xml");
-        nameList.add("国内新闻");
 
         WXTool.register(this);
 
@@ -85,7 +87,8 @@ public class NavigationActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        newsFragment = NewsFragment.newInstance(1, testLinks, nameList);
+        newsFragment = NewsFragment.newInstance(categoryList);
+        //newsFragment.showRecommend(user);
         getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
 
 
@@ -93,22 +96,24 @@ public class NavigationActivity extends AppCompatActivity
         Intent intent = getIntent();
         if (intent != null)
         {
-            user = intent.getStringExtra("username");
-            email = intent.getStringExtra("email");
+            //user.setUsername(intent.getStringExtra("username"));
+            //user.setUsername(intent.getStringExtra("email"));
+            User tmp = intent.getParcelableExtra("user");
+            user = tmp == null? user: tmp;
 
             TextView userText = navigationView.getHeaderView(0).findViewById(R.id.username_text);
-            userText.setText(user);
+            userText.setText(user.getUsername());
 
             TextView emailText = navigationView.getHeaderView(0).findViewById(R.id.email_address_text);
-            emailText.setText(email);
+            emailText.setText(user.getEmail());
         }
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    /*public void setEmail(String email) {
+        user.u = email;
+    }*/
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -160,8 +165,8 @@ public class NavigationActivity extends AppCompatActivity
 
 
             state = State.FAVORATE;
-            newsFragment.setUsername(user);
-            newsFragment.showFavorate(user);
+            //newsFragment.setUsername(user.getUsername());
+            newsFragment.showFavorate(user.getUsername());
             //Log.e("nav", "favorate" + Integer.toString(newsFragment.mRssFeed.getItemCount()));
 
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
@@ -173,12 +178,17 @@ public class NavigationActivity extends AppCompatActivity
 
             //todo: local
             state = State.LOCAL;
+            newsFragment.showLocal();
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
 
 
         } else if (id == R.id.nav_recommend) {
             //todo: recommendation
             state = State.RECOMMEND;
+            newsFragment.showRecommend(user);
+
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
+
 
         } else if (id == R.id.nav_categories_setting) {
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, addCategoryFragment).commit();
@@ -187,7 +197,8 @@ public class NavigationActivity extends AppCompatActivity
         {
             Log.e("nav", "home");
             state = State.HOME;
-            newsFragment.refetch();
+            //newsFragment.refetch();
+            newsFragment.showHome();
 
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, newsFragment).commit();
         }
@@ -199,17 +210,43 @@ public class NavigationActivity extends AppCompatActivity
 
 
     @Override
-    public void onFragmentInteraction(String name, String link, boolean checked) {
-        if (!checked && nameList.contains(name))
+    public void onFragmentInteraction(String name, String link, int id, boolean checked) {
+        if (!checked)
         {
-            nameList.remove(name);
-            testLinks.remove(link);
+            for (Category category: categoryList)
+            {
+                if (category.getName().equals(name))
+                {
+                    categoryList.remove(category);
+                    break;
+                }
+            }
+
         }
-        else if (checked && !nameList.contains(name))
+        else if (checked)
         {
-            nameList.add(name);
-            testLinks.add(link);
+            boolean flag = false;
+            for (Category category: categoryList)
+            {
+                if (category.getName().equals(name))
+                {
+                    categoryList.remove(category);
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+            {
+                Category category = new Category();
+                category.setUrl(link);
+                category.setName(name);
+                category.setId(id);
+                categoryList.add(category);
+            }
+
         }
+
+        Log.e("category in nav", Integer.toString(categoryList.size()));
     }
 
     @Override
@@ -218,13 +255,13 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentInteraction(String user, String email) {
+    public void onFragmentInteraction(User user) {
         TextView userText = navigationView.getHeaderView(0).findViewById(R.id.username_text);
         this.user = user;
-        userText.setText(user);
+        userText.setText(user.getUsername());
 
         TextView emailText = navigationView.getHeaderView(0).findViewById(R.id.email_address_text);
-        this.email = email;
-        emailText.setText(email);
+        //this.email = email;
+        emailText.setText(user.getEmail());
     }
 }

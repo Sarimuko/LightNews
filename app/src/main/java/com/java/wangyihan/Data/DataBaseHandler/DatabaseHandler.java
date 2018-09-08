@@ -1,6 +1,7 @@
 package com.java.wangyihan.Data.DataBaseHandler;
 
 import android.content.Context;
+import android.util.Log;
 import com.java.wangyihan.Data.Category;
 import com.java.wangyihan.Data.FavorateNews;
 import com.java.wangyihan.Data.RssItem;
@@ -9,12 +10,30 @@ import com.java.wangyihan.Util.MD5Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class DatabaseHandler {
-    public static void readNews(RssItem item, Context context) {
+    public static void readNews(User user, RssItem item, Context context) {
         List<RssItem> mPhones = new ArrayList<RssItem>();
         mPhones.add(item);
         NewsDatabase.getInstance(context).getReadNewsDao().insert(mPhones);
+
+        Map<String, Object> history = user.getHistory();
+        if (history.containsKey(new Long(item.getCategoryID()).toString()))
+        {
+            history.put(new Long(item.getCategoryID()).toString(), (Integer)history.get(new Long(item.getCategoryID()).toString()) + 1);
+
+        }
+        else
+        {
+            history.put(new Long(item.getCategoryID()).toString(), 1);
+        }
+
+        Log.e(new Long(item.getCategoryID()).toString(), history.get(new Long(item.getCategoryID()).toString()).toString());
+        user.setHistory(history);
+
+        register(user, context);
     }
 
     public static List<RssItem> getAllRead(Context context)
@@ -97,6 +116,14 @@ public class DatabaseHandler {
         NewsDatabase.getInstance(context).getUserDao().insert(list);
     }
 
+    public static void register(User user, Context context)
+    {
+        List<User> list = new ArrayList<User>();
+        list.add(user);
+
+        NewsDatabase.getInstance(context).getUserDao().insert(list);
+    }
+
     public static int hasUser(String username, String email, String password, Context context)
     {
         password = MD5Utils.stringToMD5(password);
@@ -111,9 +138,37 @@ public class DatabaseHandler {
         return 1;
     }
 
+    public static User getUser(String username, String email, String password, Context context)
+    {
+        password = MD5Utils.stringToMD5(password);
+        String[] user = {username};
+        List<User> list = NewsDatabase.getInstance(context).getUserDao().getAllByName(user);
+
+        if (list.isEmpty())
+            return null;//没有
+
+        if (!password.equals(list.get(0).getPassword()) ||!email.equals(list.get(0).getEmail()))
+            return null;//失败
+        return list.get(0);
+    }
+
     public static List<Category> getAllCategories(Context context)
     {
         return NewsDatabase.getInstance(context).getCategoryDao().getAll();
+    }
+
+    public static long getCategoryCount(Context context)
+    {
+        return NewsDatabase.getInstance(context).getCategoryDao().getCount();
+    }
+
+    public static Category getCategory(long ID, Context context)
+    {
+        long[] ids = new long[1];
+        ids[0] = ID;
+
+        List<Category> categoryList = NewsDatabase.getInstance(context).getCategoryDao().getAllByIds(ids);
+        return categoryList == null || categoryList.isEmpty()? null: categoryList.get(0);
     }
 
 

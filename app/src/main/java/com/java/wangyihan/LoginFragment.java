@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.java.wangyihan.Data.DataBaseHandler.DatabaseHandler;
+import com.java.wangyihan.Data.User;
 import org.w3c.dom.Text;
 
 
@@ -43,8 +44,7 @@ public class LoginFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+
      * @return A new instance of fragment LoginFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -104,12 +104,14 @@ public class LoginFragment extends Fragment {
             {
                 DatabaseHandler.register(user, email, password, rootContext.getApplicationContext());
                 Toast.makeText(rootContext, "注册成功", Toast.LENGTH_SHORT).show();
-                mListener.onFragmentInteraction(user, email);
+                User userObj = DatabaseHandler.getUser(user, email, password, rootContext.getApplicationContext());
+                mListener.onFragmentInteraction(userObj);
             }
             else
             {
                 Toast.makeText(rootContext, "登录成功", Toast.LENGTH_SHORT).show();
-                mListener.onFragmentInteraction(user, email);
+                User userObj = DatabaseHandler.getUser(user, email, password, rootContext.getApplicationContext());
+                mListener.onFragmentInteraction(userObj);
             }
         }
     }
@@ -145,6 +147,6 @@ public class LoginFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(String user, String email);
+        void onFragmentInteraction(User user);
     }
 }

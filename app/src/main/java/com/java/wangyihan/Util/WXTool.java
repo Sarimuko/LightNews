@@ -52,7 +52,7 @@ public class WXTool {
         instance.context = context;
     }
 
-    public void shareUrl(int flag,String url,String title,String description){
+    public void shareUrl(int flag,String url,String title,String description, Bitmap image){
         //初始化一个WXWebpageObject填写url
         WXWebpageObject webpageObject = new WXWebpageObject();
         webpageObject.webpageUrl = url;
@@ -61,7 +61,8 @@ public class WXTool {
         msg.title = title;
         msg.description = description;
 
-        Bitmap thumb = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher_lightnews);
+        Bitmap thumb = image;
+        thumb = Bitmap.createScaledBitmap(thumb, 200, 300, true);
         msg.setThumbImage(thumb);
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = String.valueOf(System.currentTimeMillis());

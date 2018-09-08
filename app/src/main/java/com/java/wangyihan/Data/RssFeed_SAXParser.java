@@ -38,6 +38,7 @@ public class RssFeed_SAXParser implements Runnable{
 
     String mUrl;
     RssHandler rssHandler;
+    private long categoryID;
 
     /**
      *
@@ -47,20 +48,29 @@ public class RssFeed_SAXParser implements Runnable{
      * @throws SAXException
      * @throws IOException
      */
-    public RssFeed getFeed(String urlStr) throws ParserConfigurationException, SAXException, IOException, InterruptedException{
+    public RssFeed getFeed(String urlStr, long categoryID){
 
         //for test
+        this.categoryID = categoryID;
         rssHandler.rssFeed = null;
-        mUrl = urlStr;
+        this.mUrl = urlStr;
 
         Thread thread = new Thread(this);
         thread.start();
 
-        thread.join();
+        try
+        {
+            thread.join();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         //Log.e("e", Boolean.toString(rssHandler.getRssFeed() == null));
 
 
-        return rssHandler.getRssFeed();
+
+        return rssHandler.rssFeed;
     }
 
     public void getContent(String urlStr) throws IOException
@@ -103,6 +113,13 @@ public class RssFeed_SAXParser implements Runnable{
                 inputStreamReader = new InputStreamReader(url.openStream(), "UTF-8");
             InputSource inputSource = new InputSource(inputStreamReader);
             xmlReader.parse(inputSource);
+
+            RssFeed rssFeed = rssHandler.getRssFeed();
+
+            for (RssItem item: rssFeed.getItems())
+            {
+                item.setCategoryID(categoryID);
+            }
 
             //Log.e("e", Boolean.toString(rssHandler.getRssFeed() == null));
 
