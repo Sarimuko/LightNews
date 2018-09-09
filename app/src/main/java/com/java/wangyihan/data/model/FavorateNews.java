@@ -23,6 +23,16 @@ public class FavorateNews {
     private String pubdate;
     @ColumnInfo
     private String ownerName;
+    @ColumnInfo
+    private byte[] image;
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
 
     public String getTitle() {
@@ -58,6 +68,7 @@ public class FavorateNews {
         this.link = item.getLink();
         this.pubdate = item.getPubdate();
         this.id = id;
+        this.image = item.getImage();
     }
 
 

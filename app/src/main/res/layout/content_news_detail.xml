@@ -53,11 +53,10 @@
                     android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_dialog_alert"
                     android:id="@+id/news_detail_image"
                     android:layout_gravity="center"/>
-            <RelativeLayout
+            <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:id="@+id/detail_buttons_layout"
-                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin">
-
+                    android:layout_height="match_parent">
                 <Button
                         android:text="阅读原文"
                         android:layout_width="wrap_content"
@@ -81,7 +80,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:id="@+id/text_to_sound_button"
                         android:layout_toLeftOf="@id/share_wechat_button"/>
-            </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/comment_input" android:layout_weight="1"/>
+                <Button
+                        android:text="评论"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/comment_button"
+                        android:layout_weight="1"/>
+            </LinearLayout>
+            <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/comment_list"/>
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

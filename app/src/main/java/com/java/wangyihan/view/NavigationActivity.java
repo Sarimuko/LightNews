@@ -66,15 +66,6 @@ public class NavigationActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -94,8 +85,6 @@ public class NavigationActivity extends AppCompatActivity
         Intent intent = getIntent();
         if (intent != null)
         {
-            //user.setUsername(intent.getStringExtra("username"));
-            //user.setUsername(intent.getStringExtra("email"));
             User tmp = intent.getParcelableExtra("user");
             user = tmp == null? user: tmp;
 
@@ -107,9 +96,7 @@ public class NavigationActivity extends AppCompatActivity
         }
     }
 
-    /*public void setEmail(String email) {
-        user.u = email;
-    }*/
+
 
     public void setUser(User user) {
         this.user = user;

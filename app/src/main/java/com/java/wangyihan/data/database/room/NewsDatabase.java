@@ -12,7 +12,7 @@ import com.java.wangyihan.data.model.User;
 import com.java.wangyihan.util.Converter;
 
 @TypeConverters({Converter.class})
-@Database(entities = {FavorateNews.class, RssItem.class, Category.class, User.class}, version = 4, exportSchema = false)
+@Database(entities = {FavorateNews.class, RssItem.class, Category.class, User.class}, version = 5, exportSchema = false)
 public abstract class NewsDatabase extends RoomDatabase {
 
     private static NewsDatabase INSTANCE;

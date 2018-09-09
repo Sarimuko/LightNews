@@ -10,21 +10,22 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
+import com.java.wangyihan.data.database.mongodb.MongodbHelper;
 import com.java.wangyihan.data.database.room.DatabaseHandler;
+import com.java.wangyihan.data.model.Comment;
 import com.java.wangyihan.data.model.ImageUrlFetcher;
 import com.java.wangyihan.data.model.RssItem;
 import com.java.wangyihan.R;
+import com.java.wangyihan.data.model.User;
 import com.java.wangyihan.util.ImageService;
 import com.java.wangyihan.util.Tools;
 import com.java.wangyihan.util.WXTool;
@@ -34,8 +35,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 
 public class NewsDetailActivity extends AppCompatActivity implements Runnable{
@@ -157,15 +157,6 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         final Intent intent = getIntent();
         title = intent.getStringExtra("title");
         pubDate = intent.getStringExtra("pubDate");
@@ -220,6 +211,26 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
 
 
         /**
+         * 显示评论列表
+         */
+        List<Comment> commentList = MongodbHelper.getInstance().getCommentByTitle(title);
+        ListView lv = findViewById(R.id.comment_list);
+
+        List<Map<String, Object>> commentMapList = new ArrayList<Map<String, Object>>();
+        for (Comment comment: commentList)
+        {
+            HashMap<String, Object> item = new HashMap<String, Object>();
+            item.put("author", comment.getUsername());
+            item.put("content", comment.getComment());
+
+            commentMapList.add(item);
+        }
+
+        SimpleAdapter sa = new SimpleAdapter(this, commentMapList, R.layout.fragment_comment_display, new String[]{"author", "content"}, new int[]{R.id.comment_author, R.id.comment_content});
+
+        lv.setAdapter(sa);
+        
+        /**
          * 朗读按钮
          */
         Button soundButton = findViewById(R.id.text_to_sound_button);
@@ -253,6 +264,7 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
                 item.setDescription(description);
                 item.setLink(link);
                 item.setPubdate(pubDate);
+                item.setImage(imageToShow);
 
                 Log.e("user favorate", username);
 
@@ -268,6 +280,22 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
                     WXTool.getInstance().shareUrl(1, link, title, description, BitmapFactory.decodeByteArray(imageToShow, 0, imageToShow.length));
                 else
                     WXTool.getInstance().shareUrl(1, link, title, description, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_lightnews));
+            }
+        });
+
+
+        Button commentButton = findViewById(R.id.comment_button);
+        commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText commentText = view.findViewById(R.id.comment_input);
+                String comment = commentText.getText().toString();
+
+
+                if (!TextUtils.isEmpty(comment))
+                {
+                    MongodbHelper.getInstance().addComment(username, title, comment);
+                }
             }
         });
 

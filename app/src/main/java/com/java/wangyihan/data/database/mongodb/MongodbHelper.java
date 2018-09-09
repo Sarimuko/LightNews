@@ -51,6 +51,14 @@ public class MongodbHelper {
         collection.insertMany(documents);
     }
 
+    public void addComment(String username, String title, String comment)
+    {
+        MongoCollection<Document> collection = mongoDatabase.getCollection("comment");
+        Document document = new Document("username", username).append("comment", comment).append("title", title);
+        List<Document> documents = new ArrayList<>();
+        documents.add(document);
+        collection.insertMany(documents);
+    }
     public List<Comment> getCommentByTitle(String title)
     {
         MongoCollection<Document> collection = mongoDatabase.getCollection("comment");

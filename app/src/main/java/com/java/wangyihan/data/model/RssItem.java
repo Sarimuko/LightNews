@@ -21,6 +21,16 @@ public class RssItem implements Parcelable {
     private String pubdate = "";
     @ColumnInfo
     private long categoryID = 0;
+    @ColumnInfo
+    private byte[] image = new byte[0];
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     @Ignore
     public static final String TITLE = "title";
@@ -53,6 +63,7 @@ public class RssItem implements Parcelable {
         parcel.writeString(link);
         parcel.writeString(category);
         parcel.writeString(pubdate);
+        parcel.writeByteArray(image);
 
 
     }
@@ -79,6 +90,7 @@ public class RssItem implements Parcelable {
         link = in.readString();
         category = in.readString();
         pubdate = in.readString();
+        in.writeByteArray(image);
     }
 
     @Ignore
@@ -89,6 +101,7 @@ public class RssItem implements Parcelable {
         this.category = item.getCategory();
         this.link = item.getLink();
         this.description = item.getDescription();
+        this.image = item.getImage();
     }
 
 
