@@ -229,7 +229,7 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
         SimpleAdapter sa = new SimpleAdapter(this, commentMapList, R.layout.fragment_comment_display, new String[]{"author", "content"}, new int[]{R.id.comment_author, R.id.comment_content});
 
         lv.setAdapter(sa);
-        
+
         /**
          * 朗读按钮
          */

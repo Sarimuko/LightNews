@@ -153,6 +153,12 @@ public class DatabaseHandler {
 
     public static List<Category> getAllCategories(Context context)
     {
+        if (getCategoryCount(context) == 0)
+        {
+            addCategory("国内新闻", "http://news.qq.com/newsgn/rss_newsgn.xml", context);
+            addCategory("经济新闻", "http://www.people.com.cn/rss/finance.xml", context);
+            addCategory("体育新闻", "http://www.people.com.cn/rss/sports.xml", context);
+        }
         return NewsDatabase.getInstance(context).getCategoryDao().getAll();
     }
 
