@@ -23,14 +23,20 @@
                     app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
         </android.support.design.widget.AppBarLayout>
-        <SearchView
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/search_view"
-                android:background="?attr/colorTextBackground"/>
-        <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" android:id="@+id/news_list"
-                android:background="?attr/colorTextBackground"/>
+                android:layout_height="match_parent"
+                >
+            <SearchView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/search_view"
+                    android:background="?attr/colorTextBackground"/>
+            <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/news_list"
+                    />
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

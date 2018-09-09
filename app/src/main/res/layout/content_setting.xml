@@ -6,22 +6,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:showIn="@layout/activity_setting"
-        tools:context="com.java.wangyihan.SettingActivity">
+        tools:showIn="@layout/fragment_setting">
 
-    <LinearLayout
-            android:orientation="vertical"
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <Switch
-                android:text="@string/night_mode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/night_mode_switch"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"/>
-        <Switch
-                android:text="@string/data_saving"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/save_net_switch"
-                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"/>
-    </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                    android:background="?attr/colorTextBackground">
+            <Switch
+                    android:text="@string/night_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/night_mode_switch"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"/>
+            <Switch
+                    android:text="@string/data_saving"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/save_net_switch"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"/>
+        </LinearLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

@@ -17,18 +17,18 @@ public class SettingActivity extends AppCompatActivity {
 
         setTheme(Configure.noBarTheme);
 
-        setContentView(R.layout.activity_setting);
+        setContentView(R.layout.fragment_setting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         Switch nightSwitch = findViewById(R.id.night_mode_switch);
         Switch saveSwitch = findViewById(R.id.save_net_switch);

@@ -2,6 +2,8 @@ package com.java.wangyihan;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -11,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +128,24 @@ public class NewsFragment extends Fragment implements Runnable{
             }
             else
             {
-                view.setBackgroundColor(rootContext.getColor(R.color.cardview_light_background));
+                TypedValue typedValue = new TypedValue();
+                Resources.Theme theme = view.getContext().getTheme();
+                try {
+                    theme.resolveAttribute(R.attr.colorTextBackground, typedValue, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                Resources resources = getResources();
+                try {
+                    int color = view.getContext().getColor(typedValue.resourceId); // 获取颜色值
+                    view.setBackgroundColor(color);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
             }
 
             return view;

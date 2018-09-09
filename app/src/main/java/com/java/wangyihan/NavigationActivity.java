@@ -23,10 +23,11 @@ import com.java.wangyihan.Util.WXTool;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NewsFragment.OnFragmentInteractionListener, CategoryListFragment.OnFragmentInteractionListener
-, LoginFragment.OnFragmentInteractionListener{
+, LoginFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener{
 
 
     private static User user;
@@ -55,6 +56,7 @@ public class NavigationActivity extends AppCompatActivity
     public ArrayList<Category> categoryList = new ArrayList<Category>();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,14 +71,14 @@ public class NavigationActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -149,8 +151,8 @@ public class NavigationActivity extends AppCompatActivity
         }
         if (id == R.id.setting_item)
         {
-            Intent intent = new Intent(this, SettingActivity.class);
-            startActivity(intent);
+            SettingFragment settingFragment = SettingFragment.newInstance();
+            getFragmentManager().beginTransaction().replace(R.id.news_list_frame, settingFragment).commit();
             return true;
         }
 
@@ -270,5 +272,11 @@ public class NavigationActivity extends AppCompatActivity
         TextView emailText = navigationView.getHeaderView(0).findViewById(R.id.email_address_text);
         //this.email = email;
         emailText.setText(user.getEmail());
+    }
+
+    @Override
+    public void onFragmentInteraction() {
+        setTheme(Configure.noBarTheme);
+        recreate();
     }
 }
