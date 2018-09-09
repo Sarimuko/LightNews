@@ -3,15 +3,11 @@ package com.java.wangyihan.wxapi;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import com.java.wangyihan.NavigationActivity;
+import com.java.wangyihan.view.NavigationActivity;
 import com.java.wangyihan.R;
-import com.java.wangyihan.Util.OnResponseListener;
-import com.java.wangyihan.Util.WXTool;
+import com.java.wangyihan.util.WXTool;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.modelmsg.WXTextObject;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
 public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHandler {

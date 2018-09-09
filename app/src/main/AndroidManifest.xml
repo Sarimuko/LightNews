@@ -21,14 +21,15 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:name="android.support.multidex.MultiDexApplication">
         <activity
-                android:name=".NewsDetailActivity"
+                android:name=".view.NewsDetailActivity"
                 android:label="@string/title_activity_news_detail"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:name=".OriginalNewsActivity"
+                android:name=".view.OriginalNewsActivity"
                 android:label="@string/title_activity_original_news"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
@@ -37,7 +38,7 @@
                 android:exported="true">
         </activity>
         <activity
-                android:name=".NavigationActivity"
+                android:name=".view.NavigationActivity"
                 android:label="@string/title_activity_navigation"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -47,7 +48,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".SettingActivity"
+                android:name=".view.SettingActivity"
                 android:label="@string/title_activity_setting"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>

@@ -1,7 +1,5 @@
 package com.java.wangyihan;
 
-import com.java.wangyihan.Data.RssFeed;
-import com.java.wangyihan.Data.RssFeed_SAXParser;
 import org.junit.Test;
 
 

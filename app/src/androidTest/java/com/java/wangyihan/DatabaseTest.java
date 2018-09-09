@@ -3,9 +3,8 @@ package com.java.wangyihan;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
-import com.java.wangyihan.Data.DataBaseHandler.DatabaseHandler;
-import com.java.wangyihan.Data.RssItem;
+import com.java.wangyihan.data.database.room.DatabaseHandler;
+import com.java.wangyihan.data.model.RssItem;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
