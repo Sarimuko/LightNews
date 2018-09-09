@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class NewsDetailActivity extends AppCompatActivity implements Runnable{
@@ -50,6 +52,7 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
     private String username;
     private byte[] imageToShow = new byte[0];
 
+    private static TextToSpeech textToSpeech;
 
     @Override
     public void run() {
@@ -197,10 +200,38 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
         }
 
 
+
+        if (textToSpeech == null)
+        {
+            textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == textToSpeech.SUCCESS) {
+                        int result = textToSpeech.setLanguage(Locale.CHINA);
+                        if (result != TextToSpeech.LANG_COUNTRY_AVAILABLE
+                                && result != TextToSpeech.LANG_AVAILABLE){
+                            Toast.makeText(getApplicationContext(), "TTS暂时不支持这种语音的朗读！",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+        }
+
         Thread thread = new Thread(this);
         thread.start();
 
 
+        /**
+         * 朗读按钮
+         */
+        Button soundButton = findViewById(R.id.text_to_sound_button);
+        soundButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textToSpeech.speak(description, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
 
         Button linkButton = findViewById(R.id.link_button);
         linkButton.setOnClickListener(new View.OnClickListener() {

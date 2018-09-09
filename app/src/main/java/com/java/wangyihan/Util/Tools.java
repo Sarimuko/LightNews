@@ -1,9 +1,13 @@
 package com.java.wangyihan.Util;
 
+import android.speech.tts.TextToSpeech;
+
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Tools {
+
     public static boolean isURL(String str){
         //转换为小写
         str = str.toLowerCase();
