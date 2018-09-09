@@ -85,7 +85,7 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
 
         try
         {
-            Socket socket = new Socket("101.5.178.73", 8889);
+            Socket socket = new Socket("123.206.43.232", 8889);
             BufferedReader is=new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter os=new PrintWriter(socket.getOutputStream());
 
@@ -152,6 +152,7 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Configure.noBarTheme);
         setContentView(R.layout.activity_news_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -180,17 +181,11 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
         imageView.setImageBitmap(BitmapFactory.decodeByteArray(imageToShow, 0, imageToShow.length));
 
 
-
-
-
         TextView titleView = findViewById(R.id.news_detail_title);
         titleView.setText(title);
 
         TextView pubDateView = findViewById(R.id.news_detail_pubDate);
         pubDateView.setText(pubDate);
-
-        //TextView authorView = findViewById(R.id.news_detail_author);
-        //authorView.setText(author);
 
         TextView descripionView = findViewById(R.id.news_detail_description);
         if (linkDescription != null && !linkDescription.isEmpty())
@@ -217,7 +212,6 @@ public class NewsDetailActivity extends AppCompatActivity implements Runnable{
                 startActivity(intent1);
             }
         });
-        //linkButton.setText(link);
 
         /**
          * 添加到收藏

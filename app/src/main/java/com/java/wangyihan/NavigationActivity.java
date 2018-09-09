@@ -1,6 +1,7 @@
 package com.java.wangyihan;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -60,7 +61,7 @@ public class NavigationActivity extends AppCompatActivity
 
         //user = new User("default", "default", "default");
 
-
+        setTheme(Configure.noBarTheme);
         WXTool.register(this);
 
         setContentView(R.layout.activity_navigation);
@@ -144,6 +145,12 @@ public class NavigationActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             getFragmentManager().beginTransaction().replace(R.id.news_list_frame, addCategoryFragment).commit();
+            return true;
+        }
+        if (id == R.id.setting_item)
+        {
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
             return true;
         }
 

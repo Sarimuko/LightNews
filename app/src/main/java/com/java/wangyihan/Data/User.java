@@ -112,6 +112,10 @@ public class User implements Parcelable {
     public Category getRecommend(Context context)
     {
         long categoryCnt = DatabaseHandler.getCategoryCount(context);
+        if (categoryCnt == 0)
+        {
+            return null;
+        }
         Random random = new Random();
         if (history.isEmpty())
         {

@@ -40,4 +40,7 @@
     <string name="title_activity_category_check">CategoryCheckActivity</string>
     <string name="category_tag_input_hit">category tag</string>
     <string name="url_input_hint">url</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="night_mode">Night mode</string>
+    <string name="data_saving">Data saving</string>
 </resources>

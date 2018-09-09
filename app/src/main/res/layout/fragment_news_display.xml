@@ -2,13 +2,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin">
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/news_title"
-              android:text="今天清华同学们的第一周军训结束了！同学们表示非常开心" android:textSize="40px" android:textStyle="bold"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/news_date"
-              android:text="2018-9-1" android:layout_below="@id/news_title"
-              android:layout_marginTop="@dimen/text_margin"/>
+
+                >
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorTextBackground"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/news_title"
+                  android:text="今天清华同学们的第一周军训结束了！同学们表示非常开心" android:textSize="40px" android:textStyle="bold"
+                  android:textColor="?attr/colorText"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/news_date"
+                  android:text="2018-9-1" android:layout_below="@id/news_title"
+                  android:layout_marginTop="@dimen/text_margin"
+                  android:textColor="?attr/colorText" android:textAlignment="viewStart"/>
+    </LinearLayout>
 </RelativeLayout>

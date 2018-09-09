@@ -23,7 +23,7 @@ public class DatabaseTest {
         item.setTitle("test title");
         item.setDescription("this is a test");
 
-        DatabaseHandler.readNews(item, appContext);
+        //DatabaseHandler.readNews(item, appContext);
 
         List<RssItem> ans = DatabaseHandler.getAllRead(appContext);
 
